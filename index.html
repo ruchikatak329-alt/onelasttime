@@ -410,26 +410,10 @@ body.admin .project-delete{display:block;}
 .compare-group h4{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--plum-soft);margin-bottom:14px;}
 .compare-box{
   position:relative;overflow:hidden;border-radius:10px;box-shadow:var(--shadow);background:var(--plum);
-  cursor:ew-resize;user-select:none;
 }
 .compare-box.reel-ratio{width:min(360px,85vw);aspect-ratio:9/16;}
 .compare-box.post-ratio{width:min(480px,92vw);aspect-ratio:1/1;}
 .compare-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.compare-layer.before{z-index:1;}
-.compare-layer.after{z-index:2;clip-path:inset(0 50% 0 0);}
-.compare-tag{position:absolute;top:10px;font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;background:rgba(43,22,34,.55);color:#fff;padding:3px 8px;border-radius:4px;z-index:3;}
-.compare-tag.before-tag{left:10px;}
-.compare-tag.after-tag{right:10px;}
-.compare-handle{
-  position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;z-index:4;
-  transform:translateX(-1px);pointer-events:none;
-}
-.compare-handle::after{
-  content:'⇔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:var(--plum);font-size:.9rem;
-}
-.edit-connector{text-align:center;margin-top:40px;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--berry);}
 .compare-note{max-width:280px;margin:14px auto 0;font-family:var(--serif-2);font-style:italic;font-size:.9rem;color:var(--plum-soft);min-height:1.4em;}
 
 /* ============ PLATFORMS ============ */
@@ -795,37 +779,28 @@ body.style-mode .reel-upload-btn{pointer-events:none;}
 <section class="section" id="editing" style="background:var(--ivory-deep);">
   <div class="container" style="text-align:center;">
     <span class="eyebrow">the edit ✦</span>
-    <h2 class="section-title" style="margin-top:14px;">Before &amp; After</h2>
+    <h2 class="section-title" style="margin-top:14px;">Showcasing My Editing Skills</h2>
     <div class="edit-row">
       <div class="compare-group">
         <h4>Reel</h4>
-        <div class="compare-box reel-ratio" id="compareReel" data-box="editing.reel">
-          <img class="compare-layer before upload-zone" id="reelBeforeImg" data-slot="editing.reelBefore">
-          <img class="compare-layer after upload-zone" id="reelAfterImg" data-slot="editing.reelAfter">
-          <span class="compare-tag before-tag">Before</span>
-          <span class="compare-tag after-tag">After</span>
-          <div class="compare-handle" id="reelHandle"></div>
+        <div class="compare-box reel-ratio upload-zone" id="editReelBox" data-slot="editing.reel" data-box="editing.reel">
+          <img class="compare-layer" id="editReelImg">
+          <div class="upload-overlay"><span>Add Reel</span></div>
+          <button class="slot-delete" data-clear="editing.reel">×</button>
         </div>
-        <input type="file" accept="image/*" id="reelBeforeInput" style="display:none">
-        <input type="file" accept="image/*" id="reelAfterInput" style="display:none">
         <p class="compare-note" data-edit="editing.reelNote" contenteditable="false">Add a line or two about this edit here.</p>
       </div>
       <div class="compare-group">
         <h4>Post</h4>
-        <div class="compare-box post-ratio" id="comparePost" data-box="editing.post">
-          <img class="compare-layer before upload-zone" id="postBeforeImg" data-slot="editing.postBefore">
-          <img class="compare-layer after upload-zone" id="postAfterImg" data-slot="editing.postAfter">
-          <span class="compare-tag before-tag">Before</span>
-          <span class="compare-tag after-tag">After</span>
-          <div class="compare-handle" id="postHandle"></div>
+        <div class="compare-box post-ratio upload-zone" id="editPostBox" data-slot="editing.post" data-box="editing.post">
+          <img class="compare-layer" id="editPostImg">
+          <div class="upload-overlay"><span>Add Post</span></div>
+          <button class="slot-delete" data-clear="editing.post">×</button>
         </div>
-        <input type="file" accept="image/*" id="postBeforeInput" style="display:none">
-        <input type="file" accept="image/*" id="postAfterInput" style="display:none">
         <p class="compare-note" data-edit="editing.postNote" contenteditable="false">Add a line or two about this edit here.</p>
       </div>
     </div>
-    <p class="edit-connector reveal">Raw → Edited</p>
-    <p style="max-width:420px;margin:14px auto 0;color:var(--plum-soft);font-size:.85rem;">Drag left/right across each frame to compare. <span id="editHint" style="display:none;">(Admin: click a frame to upload that side's image.)</span></p>
+    <p style="max-width:420px;margin:20px auto 0;color:var(--plum-soft);font-size:.85rem;"><span id="editHint" style="display:none;">(Admin: click a frame to upload an image, hover + click × to remove it.)</span></p>
   </div>
 </section>
 
@@ -934,7 +909,7 @@ body.style-mode .reel-upload-btn{pointer-events:none;}
         <option value="why-me">Why Me</option>
         <option value="work">Recent Work</option>
         <option value="tools">Tools</option>
-        <option value="editing">Before &amp; After</option>
+        <option value="editing">The Edit</option>
         <option value="platforms">Platforms</option>
         <option value="contact">Contact / Footer</option>
       </select>
@@ -1045,7 +1020,7 @@ const DEFAULTS = {
     {name:'LinkedIn',desc:'Professional storytelling'},
     {name:'YouTube',desc:'Video storytelling'}
   ],
-  editing:{reelBefore:'',reelAfter:'',postBefore:'',postAfter:'',reelNote:'Add a line or two about this edit here.',postNote:'Add a line or two about this edit here.'},
+  editing:{reel:'', post:'', reelNote:'Add a line or two about this edit here.', postNote:'Add a line or two about this edit here.'},
   contact:{line:"Have an idea, a brand or a story that deserves to be seen? Let's turn it into something worth stopping for.",name:'Mansi Sankhla',instagram:'@thatgirlmansi',email:'sankhlamansi723@gmail.com',phone:'9462653296'},
   projects:[
     {
@@ -1330,10 +1305,8 @@ function renderProjects(){
 }
 
 function renderEditingImages(){
-  setImgIfAny('reelBeforeImg', state.editing.reelBefore);
-  setImgIfAny('reelAfterImg', state.editing.reelAfter);
-  setImgIfAny('postBeforeImg', state.editing.postBefore);
-  setImgIfAny('postAfterImg', state.editing.postAfter);
+  setImgIfAny('editReelImg', state.editing.reel);
+  setImgIfAny('editPostImg', state.editing.post);
 }
 function setImgIfAny(id, val){
   const el = document.getElementById(id);
@@ -1636,24 +1609,9 @@ document.getElementById('aboutPhotoInput').addEventListener('change', async (e)=
   }
 });
 
-// editing showcase before/after zones
-[['reelBeforeImg','reelBeforeInput','reelBefore'],['reelAfterImg','reelAfterInput','reelAfter'],
- ['postBeforeImg','postBeforeInput','postBefore'],['postAfterImg','postAfterInput','postAfter']].forEach(([imgId,inputId,key])=>{
-  document.getElementById(imgId).addEventListener('click', ()=>{
-    if(!adminMode) return;
-    document.getElementById(inputId).click();
-  });
-  document.getElementById(inputId).addEventListener('change', async (e)=>{
-    if(e.target.files && e.target.files[0]){
-      const oldVal = state.editing[key];
-      try{
-        state.editing[key] = await uploadImageToBlob(e.target.files[0]);
-        saveState(); renderEditingImages();
-        deleteBlobIfUrl(oldVal);
-      }catch(err){ /* toast already shown */ }
-    }
-  });
-});
+// editing showcase reel/post zones are handled by the generic
+// attachUploadZones()/attachClearButtons() functions (same as every
+// other [data-slot] upload zone on the site) — no special-case code needed.
 
 function attachReelUrlInputs(){
   document.querySelectorAll('.reel-url-input').forEach(inp=>{
@@ -2231,34 +2189,6 @@ let toolsActive = false;
 tableBtn.addEventListener('click', ()=>{ toolsActive = !toolsActive; layoutOrbit(toolsStage, toolsActive); });
 
 window.addEventListener('resize', ()=>{ layoutOrbit(toolsStage, toolsActive); });
-
-/* ======================================================
-   BEFORE / AFTER COMPARE SLIDERS
-====================================================== */
-function initCompare(boxId, handleId, afterClass){
-  const box = document.getElementById(boxId);
-  const handle = document.getElementById(handleId);
-  const after = box.querySelector('.after');
-  let dragging = false;
-  function setPct(pct){
-    pct = Math.max(0, Math.min(100, pct));
-    after.style.clipPath = `inset(0 ${100-pct}% 0 0)`;
-    handle.style.left = pct + '%';
-  }
-  function pointerToPct(clientX){
-    const rect = box.getBoundingClientRect();
-    return ((clientX - rect.left) / rect.width) * 100;
-  }
-  box.addEventListener('mousedown', (e)=>{ dragging = true; setPct(pointerToPct(e.clientX)); });
-  window.addEventListener('mousemove', (e)=>{ if(dragging) setPct(pointerToPct(e.clientX)); });
-  window.addEventListener('mouseup', ()=> dragging = false);
-  box.addEventListener('touchstart', (e)=>{ dragging = true; setPct(pointerToPct(e.touches[0].clientX)); }, {passive:true});
-  box.addEventListener('touchmove', (e)=>{ if(dragging) setPct(pointerToPct(e.touches[0].clientX)); }, {passive:true});
-  box.addEventListener('touchend', ()=> dragging = false);
-  setPct(50);
-}
-initCompare('compareReel','reelHandle');
-initCompare('comparePost','postHandle');
 
 /* ======================================================
    INIT
