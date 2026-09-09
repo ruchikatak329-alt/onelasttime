@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mansi Sankhla — Social Media Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ivory:#FAF5ED;
+  --ivory-deep:#F3ECE0;
+  --plum:#2B1622;
+  --plum-soft:#33131F;
+  --berry:#7C2F4C;
+  --berry-deep:#5B1F38;
+  --lavender:#C9B7DC;
+  --lavender-soft:#E6DCF0;
+  --rose:#DFA9A7;
+  --peach:#EFC5A0;
+  --sage:#9FAE8E;
+  --butter:#ECCB80;
+  --line:#E3D8C8;
+  --bag-c1:#ECCB80;
+  --bag-c2:#EFC5A0;
+  --shadow: 0 20px 45px -25px rgba(43,22,34,.35);
+  --radius-soft: 3px 18px 3px 18px;
+  --serif:'DM Serif Display', serif;
+  --serif-2:'Cormorant Garamond', serif;
+  --sans:'DM Sans', sans-serif;
+  --hand:'Caveat', cursive;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--ivory);
+  color:var(--plum);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,video{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--lavender);color:var(--plum);}
+.container{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px);}
+.eyebrow{
+  font-family:var(--hand);
+  font-size:1.35rem;
+  color:var(--berry);
+  display:inline-flex;align-items:center;gap:8px;
+  transform:rotate(-2deg);
+}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;color:var(--plum);}
+.section{padding:clamp(70px,10vw,130px) 0;position:relative;}
+.section-head{max-width:640px;margin-bottom:clamp(36px,6vw,64px);}
+.section-title{font-size:clamp(2.1rem,4.4vw,3.3rem);line-height:1.08;}
+.sub-italic{font-family:var(--serif-2);font-style:italic;color:var(--plum-soft);font-size:1.15rem;margin-top:14px;}
+button{font-family:var(--sans);cursor:pointer;}
+:focus-visible{outline:2px solid var(--berry);outline-offset:3px;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}
+}
+
+/* reveal on scroll — driven by CSS custom properties so a single
+   element can override the site-wide animation (see PER-ELEMENT
+   STYLE ENGINE below) just by setting the same properties inline. */
+.reveal{
+  opacity:0;
+  transform:var(--reveal-from, translateY(26px));
+  transition:var(--reveal-transition, opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1));
+}
+.reveal.in-view{opacity:1;transform:var(--reveal-to, translateY(0));}
+body[data-text-anim="fadein"]{--reveal-from:none;--reveal-to:none;}
+body[data-text-anim="slideleft"]{--reveal-from:translateX(-46px);--reveal-to:translateX(0);}
+body[data-text-anim="slideright"]{--reveal-from:translateX(46px);--reveal-to:translateX(0);}
+body[data-text-anim="zoom"]{--reveal-from:scale(.86);--reveal-to:scale(1);}
+body[data-text-anim="bounce"]{--reveal-from:translateY(34px);--reveal-to:translateY(0);--reveal-transition:opacity .5s ease, transform .6s cubic-bezier(.34,1.56,.64,1);}
+
+/* photo animation variants */
+body[data-photo-anim="fade"] .insta-cell img,
+body[data-photo-anim="fade"] .polaroid .photo-slot img{animation:photoFadeIn .8s ease both;}
+@keyframes photoFadeIn{from{opacity:0;}to{opacity:1;}}
+body[data-photo-anim="zoomhover"] .insta-cell img,
+body[data-photo-anim="zoomhover"] .polaroid .photo-slot img{transition:transform .5s ease;}
+body[data-photo-anim="zoomhover"] .insta-cell:hover img,
+body[data-photo-anim="zoomhover"] .polaroid:hover .photo-slot img{transform:scale(1.12);}
+body[data-photo-anim="tilt"] .insta-cell img,
+body[data-photo-anim="tilt"] .polaroid .photo-slot img{transition:transform .4s ease;}
+body[data-photo-anim="tilt"] .insta-cell:hover img,
+body[data-photo-anim="tilt"] .polaroid:hover .photo-slot img{transform:rotate(-3deg) scale(1.05);}
+body[data-photo-anim="grayscale"] .insta-cell img,
+body[data-photo-anim="grayscale"] .polaroid .photo-slot img{filter:grayscale(1);transition:filter .5s ease;}
+body[data-photo-anim="grayscale"] .insta-cell:hover img,
+body[data-photo-anim="grayscale"] .polaroid:hover .photo-slot img{filter:grayscale(0);}
+body[data-photo-anim="float"] .insta-cell img,
+body[data-photo-anim="float"] .polaroid .photo-slot img{animation:photoFloat 4s ease-in-out infinite;}
+@keyframes photoFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* ============ NAV ============ */
+header.nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(250,245,237,.82);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  transition:transform .4s ease;
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:16px clamp(20px,5vw,64px);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{
+  font-family:var(--serif);font-size:1.5rem;letter-spacing:.5px;color:var(--plum);
+  background:none;border:none;padding:0;
+}
+.logo em{font-style:italic;color:var(--berry);}
+.nav-links{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;row-gap:10px;gap:18px;}
+.nav-links a{
+  font-size:.72rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--plum-soft);
+  position:relative;padding-bottom:4px;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--berry);
+  transition:width .3s ease;
+}
+.nav-links a:hover::after{width:100%;}
+.nav-links a.cta-btn,
+.cta-btn{
+  background:var(--berry);color:#FFFFFF;border:none;flex-shrink:0;white-space:nowrap;
+  padding:10px 22px;border-radius:999px;font-size:.75rem;letter-spacing:1.2px;text-transform:uppercase;
+  transition:transform .3s ease, background .3s ease, color .3s ease;box-shadow:0 8px 18px -8px rgba(43,22,34,.5);
+}
+.nav-links a.cta-btn:hover,
+.cta-btn:hover{background:var(--plum);color:var(--butter);transform:translateY(-2px);}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:6px;}
+.hamburger span{width:24px;height:2px;background:var(--plum);display:block;}
+.mobile-menu{
+  position:fixed;inset:0;background:var(--ivory);z-index:600;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+  transform:translateY(-100%);transition:transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.mobile-menu.open{transform:translateY(0);}
+.mobile-menu a{font-family:var(--serif);font-size:1.6rem;color:var(--plum);}
+.mobile-close{position:absolute;top:22px;right:24px;background:none;border:none;font-size:1.8rem;color:var(--plum);}
+
+@media(max-width:880px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+}
+
+/* ============ HERO ============ */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  position:relative;padding-top:110px;padding-bottom:60px;overflow:hidden;
+}
+.hero-deco{position:absolute;pointer-events:none;opacity:.9;}
+.hero .deco-star{top:22%;left:6%;width:34px;animation:float 7s ease-in-out infinite;}
+.hero .deco-sparkle{top:16%;right:10%;width:30px;animation:float 8s ease-in-out infinite .5s;}
+.hero .deco-camera{bottom:14%;left:9%;width:44px;animation:float 9s ease-in-out infinite 1s;}
+.hero .deco-phone{bottom:20%;right:7%;width:36px;animation:float 6.5s ease-in-out infinite .3s;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(4deg);}}
+
+.hero-inner{text-align:center;position:relative;z-index:2;}
+.hero-label{margin-bottom:18px;}
+.hero-name-wrap{position:relative;display:inline-block;margin:6px 0 4px;}
+.hero-name-wrap::before{
+  content:'';position:absolute;left:8%;right:10%;bottom:10%;height:32%;
+  background:var(--lavender-soft);z-index:-1;border-radius:2px 30px 2px 30px;
+  transform:rotate(-1.2deg);
+}
+.hero-name{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(3rem,11vw,7.6rem);line-height:.98;letter-spacing:-1px;color:var(--plum);
+}
+.hero-sub{
+  margin-top:22px;font-size:.85rem;letter-spacing:5px;text-transform:uppercase;color:var(--berry);font-weight:500;
+}
+.hero-statement{
+  max-width:560px;margin:22px auto 0;font-family:var(--serif-2);font-style:italic;
+  font-size:clamp(1.2rem,2.4vw,1.55rem);color:var(--plum-soft);
+}
+.hero-cta{
+  margin-top:40px;display:inline-flex;align-items:center;gap:10px;
+  font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--plum);
+  border-bottom:1px solid var(--plum);padding-bottom:6px;background:none;border-top:none;border-left:none;border-right:none;
+  transition:gap .3s ease,color .3s ease;
+}
+.hero-cta:hover{gap:16px;color:var(--berry);}
+.hero-fade-item{opacity:0;transform:translateY(18px);animation:heroIn .9s ease forwards;}
+.hero-fade-item:nth-child(1){animation-delay:.1s;}
+.hero-fade-item:nth-child(2){animation-delay:.35s;}
+.hero-fade-item:nth-child(3){animation-delay:.65s;}
+.hero-fade-item:nth-child(4){animation-delay:.9s;}
+.hero-fade-item:nth-child(5){animation-delay:1.1s;}
+@keyframes heroIn{to{opacity:1;transform:translateY(0);}}
+
+/* ============ ABOUT ============ */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(40px,6vw,90px);align-items:center;}
+.polaroid{
+  position:relative;background:#fff;padding:14px 14px 46px;box-shadow:var(--shadow);
+  transform:rotate(-3deg);max-width:340px;margin:0 auto;
+}
+.polaroid::before{
+  content:'';position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-4deg);
+  width:90px;height:26px;background:rgba(217,165,160,.55);
+}
+.polaroid .photo-slot{
+  aspect-ratio:4/5;background:linear-gradient(135deg,var(--lavender-soft),var(--ivory-deep));
+  display:flex;align-items:center;justify-content:center;color:var(--plum-soft);font-family:var(--hand);font-size:1.1rem;
+  overflow:hidden;position:relative;cursor:default;
+}
+.polaroid .photo-slot img{width:100%;height:100%;object-fit:cover;}
+.polaroid figcaption{font-family:var(--hand);text-align:center;color:var(--berry);font-size:1.15rem;margin-top:10px;}
+.about-copy p{max-width:52ch;color:var(--plum-soft);font-size:1.02rem;margin:0 0 16px;}
+.about-quote{font-family:var(--hand);font-size:1.5rem;color:var(--berry);margin-top:10px;transform:rotate(-1deg);display:inline-block;}
+
+/* ============ SERVICES ============ */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.service-card{
+  padding:32px 26px;border-radius:var(--radius-soft);
+  position:relative;transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, rotate .4s ease;
+  border:1px solid var(--line);overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;top:-30px;right:-30px;width:90px;height:90px;border-radius:50%;
+  background:rgba(255,255,255,.5);transition:transform .5s ease;
+}
+.service-card:hover{transform:translateY(-8px) rotate(-1deg);box-shadow:var(--shadow);}
+.service-card:hover::before{transform:scale(1.5);}
+.service-card:nth-child(5n+1){background:var(--lavender-soft);}
+.service-card:nth-child(5n+2){background:#F7DEDD;}
+.service-card:nth-child(5n+3){background:#FBE7D3;}
+.service-card:nth-child(5n+4){background:#EAF0E3;}
+.service-card:nth-child(5n+5){background:#FBF0D9;}
+.service-num{font-family:var(--hand);font-size:1.7rem;color:var(--berry);position:absolute;top:14px;right:20px;transition:transform .4s ease;}
+.service-card:hover .service-num{transform:rotate(12deg) scale(1.15);}
+.service-card h3{font-size:1.25rem;margin-bottom:10px;padding-right:30px;position:relative;}
+.service-card p{color:var(--plum-soft);font-size:.95rem;margin:0;position:relative;}
+.services-grid .service-card:nth-child(4){grid-column:1 / span 1;}
+.services-grid .service-card:nth-child(1){transition-delay:0s;}
+.services-grid .service-card:nth-child(2){transition-delay:.1s;}
+.services-grid .service-card:nth-child(3){transition-delay:.2s;}
+.services-grid .service-card:nth-child(4){transition-delay:.3s;}
+.services-grid .service-card:nth-child(5){transition-delay:.4s;}
+@media(min-width:701px){
+  .services-grid{grid-template-columns:repeat(6,1fr);}
+  .services-grid .service-card:nth-child(1){grid-column:1/span 2;}
+  .services-grid .service-card:nth-child(2){grid-column:3/span 2;}
+  .services-grid .service-card:nth-child(3){grid-column:5/span 2;}
+  .services-grid .service-card:nth-child(4){grid-column:2/span 2;}
+  .services-grid .service-card:nth-child(5){grid-column:4/span 2;}
+}
+@media(max-width:700px){.services-grid{grid-template-columns:1fr;}}
+
+/* ============ WHY ME ============ */
+.why-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;position:relative;}
+.why-card{
+  border:1.5px dashed var(--accent-color,var(--berry));padding:36px 26px 30px;position:relative;overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease;
+}
+.why-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:6px;background:var(--accent-color,var(--berry));
+}
+.why-card::after{
+  content:'';position:absolute;bottom:-40px;right:-40px;width:110px;height:110px;border-radius:50%;
+  background:rgba(255,255,255,.5);transition:transform .5s ease;
+}
+.why-card .why-mark{
+  position:absolute;top:14px;right:18px;font-family:var(--hand);font-size:1.6rem;color:var(--accent-color,var(--berry));
+  transform:rotate(8deg);transition:transform .4s ease;
+}
+.why-card:hover{transform:translateY(-8px) rotate(var(--tilt,.6deg));box-shadow:var(--shadow);}
+.why-card:hover::after{transform:scale(1.4);}
+.why-card:hover .why-mark{transform:rotate(-8deg) scale(1.25);}
+.why-card:nth-child(1){background:var(--lavender-soft);--accent-color:var(--berry);--tilt:-1.4deg;transform:rotate(-1.4deg);}
+.why-card:nth-child(2){background:#FBE7D3;--accent-color:var(--peach);--tilt:1.1deg;transform:rotate(1.1deg);}
+.why-card:nth-child(3){background:#EAF0E3;--accent-color:var(--sage);--tilt:-.8deg;transform:rotate(-.8deg);}
+.why-card h3{position:relative;color:var(--plum);text-transform:uppercase;font-family:var(--sans);font-weight:700;font-size:.85rem;letter-spacing:2px;}
+.why-card p.desc{position:relative;margin:14px 0 12px;color:var(--plum-soft);font-family:var(--serif-2);font-size:1.15rem;font-style:italic;}
+.why-card p.tag{
+  position:relative;font-family:var(--hand);color:var(--accent-color,var(--berry));font-size:1.25rem;margin:0;
+  display:inline-block;background:rgba(255,255,255,.55);padding:2px 12px;border-radius:999px;
+}
+.why-flow{text-align:center;margin-top:34px;font-size:.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--plum-soft);}
+.why-wrap .why-card:nth-child(1){transition-delay:0s;}
+.why-wrap .why-card:nth-child(2){transition-delay:.15s;}
+.why-wrap .why-card:nth-child(3){transition-delay:.3s;}
+@media(max-width:820px){.why-wrap{grid-template-columns:1fr;}.why-card{transform:none !important;}}
+
+/* ============ RECENT WORK / PROJECTS ============ */
+.project-block{margin-bottom:90px;}
+.project-top{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
+.project-meta{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--berry);margin-bottom:14px;}
+.project-title{font-size:clamp(1.8rem,3.4vw,2.6rem);margin-bottom:10px;}
+.project-loc{font-family:var(--serif-2);font-style:italic;color:var(--plum-soft);margin-bottom:18px;}
+.project-desc{color:var(--plum-soft);max-width:46ch;}
+.project-brief{
+  background:#FBE7D3;border-radius:4px 30px 4px 30px;padding:36px 32px;position:relative;
+}
+.project-brief::before{
+  content:'“';position:absolute;top:6px;left:20px;font-family:var(--serif);font-size:3.2rem;color:var(--berry);opacity:.35;line-height:1;
+}
+.project-brief p{position:relative;font-family:var(--serif-2);font-style:italic;font-size:1.15rem;color:var(--plum-soft);margin:0;line-height:1.55;}
+@media(max-width:820px){.project-top{grid-template-columns:1fr;}}
+
+/* instagram grid */
+.grid-wrap{margin-top:60px;}
+.grid-label{margin-bottom:18px;}
+.insta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:520px;margin:0 auto;}
+.insta-cell{
+  aspect-ratio:1/1;background:var(--ivory-deep);position:relative;overflow:hidden;
+  border:1px solid var(--line);
+}
+.insta-cell img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.insta-cell:hover img{transform:scale(1.06);}
+.insta-story-single{
+  width:min(340px,85vw);aspect-ratio:9/16;margin:0 auto;background:var(--ivory-deep);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;box-shadow:var(--shadow);
+}
+.insta-story-single img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.insta-story-single:hover img{transform:scale(1.04);}
+.insta-story-single .upload-overlay{font-size:.72rem;}
+.insta-post-single{
+  width:min(520px,100%);aspect-ratio:1/1;margin:0 auto;background:var(--ivory-deep);
+  border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative;
+}
+.insta-post-single img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.insta-post-single:hover img{transform:scale(1.04);}
+
+/* reel */
+.reel-wrap{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:40px;margin-top:70px;}
+.reel-item{display:flex;flex-direction:column;align-items:center;}
+.reel-frame{
+  width:min(260px,70vw);aspect-ratio:9/16;background:var(--plum);border-radius:18px;overflow:hidden;
+  position:relative;box-shadow:var(--shadow);border:6px solid var(--plum);
+}
+.reel-frame video, .reel-frame .reel-placeholder{width:100%;height:100%;object-fit:cover;}
+.reel-placeholder{display:flex;align-items:center;justify-content:center;color:var(--ivory);font-family:var(--hand);font-size:1.1rem;text-align:center;padding:10px;}
+.reel-caption{max-width:340px;text-align:center;margin-top:18px;color:var(--plum-soft);font-size:.95rem;}
+
+/* project details / case study */
+.case-study{margin-top:90px;background:var(--ivory-deep);border-radius:6px 40px 6px 40px;padding:clamp(30px,5vw,60px);display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;}
+.case-labels{display:flex;gap:40px;margin-bottom:30px;flex-wrap:wrap;}
+.case-label small{display:block;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--berry);margin-bottom:4px;}
+.case-label span{font-family:var(--serif-2);font-size:1.15rem;display:flex;align-items:center;gap:6px;}
+.case-field{margin-bottom:22px;}
+.case-field h4{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--plum-soft);margin-bottom:8px;}
+.case-field .editable{font-size:1rem;color:var(--plum);min-height:1.5em;}
+.case-note{font-family:var(--serif-2);font-style:italic;font-size:.85rem;color:var(--plum-soft);opacity:.75;margin-top:16px;}
+.case-grid{max-width:100%;}
+@media(max-width:900px){.case-study{grid-template-columns:1fr;}}
+
+.add-project-row{text-align:center;margin-top:20px;}
+.ghost-btn{background:none;border:1.5px dashed var(--berry);color:var(--berry);padding:12px 26px;border-radius:999px;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;}
+.ghost-btn:hover{background:var(--lavender-soft);}
+.project-delete{display:none;margin:14px auto 0;background:none;border:none;color:var(--plum-soft);font-size:.75rem;text-decoration:underline;cursor:pointer;}
+body.admin .project-delete{display:block;}
+
+/* ============ TOOLS ============ */
+.tools-section{text-align:center;}
+.tools-stage{
+  position:relative;width:100%;max-width:520px;height:420px;margin:40px auto 0;
+}
+.table-graphic{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:140px;height:130px;border-radius:14px 14px 26px 26px;background:linear-gradient(160deg, var(--bag-c1), var(--bag-c2));
+  display:flex;align-items:center;justify-content:center;box-shadow:0 25px 50px -20px rgba(43,22,34,.4);
+  border:none;font-family:var(--hand);font-size:1.05rem;color:var(--plum);text-align:center;padding:14px;
+  transition:transform .3s ease;
+}
+.table-graphic::before{
+  content:'';position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  width:64px;height:34px;border:8px solid var(--berry-deep);border-bottom:none;border-radius:32px 32px 0 0;
+}
+.table-graphic::after{
+  content:'';position:absolute;top:22px;left:50%;transform:translateX(-50%);
+  width:46px;height:6px;background:var(--berry-deep);border-radius:3px;
+}
+.table-graphic span{position:relative;z-index:2;margin-top:14px;}
+.table-graphic:active{transform:translate(-50%,-50%) scale(.96);}
+.tool-badge{
+  position:absolute;left:50%;top:50%;
+  width:76px;height:76px;border-radius:50%;background:var(--ivory);border:1.5px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  box-shadow:var(--shadow);cursor:pointer;
+  transform:translate(-50%,-50%) scale(.2);opacity:0;
+  transition:transform .9s cubic-bezier(.2,.8,.2,1), opacity .6s ease, box-shadow .3s ease;
+}
+.tool-badge:hover,.tool-badge:focus{box-shadow:0 20px 35px -15px rgba(43,22,34,.5);background:var(--plum);border-color:var(--plum);}
+.tool-badge .ic{width:26px;height:26px;transition:stroke .25s ease;}
+.tool-badge span:not(.tool-tooltip){font-size:.6rem;letter-spacing:.5px;color:var(--plum-soft);transition:color .25s ease;}
+.tool-badge:hover .ic,.tool-badge:focus .ic{stroke:var(--ivory);}
+.tool-badge:hover span:not(.tool-tooltip),.tool-badge:focus span:not(.tool-tooltip){color:var(--ivory);}
+.tools-stage.active .tool-badge{opacity:1;}
+.tool-tooltip{
+  position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(6px);
+  background:var(--plum);color:#fff;padding:8px 12px;border-radius:8px;font-size:.72rem;line-height:1.3;
+  width:150px;text-align:center;opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;z-index:20;
+}
+.tool-badge:hover .tool-tooltip, .tool-badge:focus .tool-tooltip{opacity:1;transform:translateX(-50%) translateY(0);}
+.tools-hint{margin-top:26px;font-family:var(--hand);color:var(--berry);font-size:1.1rem;}
+
+/* ============ EDITING SHOWCASE ============ */
+.edit-row{display:flex;flex-wrap:wrap;justify-content:center;gap:60px;margin-top:20px;}
+.compare-group{text-align:center;}
+.compare-group h4{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--plum-soft);margin-bottom:14px;}
+.compare-box{
+  position:relative;overflow:hidden;border-radius:10px;box-shadow:var(--shadow);background:var(--plum);
+  cursor:ew-resize;user-select:none;
+}
+.compare-box.reel-ratio{width:min(360px,85vw);aspect-ratio:9/16;}
+.compare-box.post-ratio{width:min(480px,92vw);aspect-ratio:1/1;}
+.compare-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.compare-layer.before{z-index:1;}
+.compare-layer.after{z-index:2;clip-path:inset(0 50% 0 0);}
+.compare-tag{position:absolute;top:10px;font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;background:rgba(43,22,34,.55);color:#fff;padding:3px 8px;border-radius:4px;z-index:3;}
+.compare-tag.before-tag{left:10px;}
+.compare-tag.after-tag{right:10px;}
+.compare-handle{
+  position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;z-index:4;
+  transform:translateX(-1px);pointer-events:none;
+}
+.compare-handle::after{
+  content:'⇔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--plum);font-size:.9rem;
+}
+.edit-connector{text-align:center;margin-top:40px;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--berry);}
+.compare-note{max-width:280px;margin:14px auto 0;font-family:var(--serif-2);font-style:italic;font-size:.9rem;color:var(--plum-soft);min-height:1.4em;}
+
+/* ============ PLATFORMS ============ */
+.platform-field{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:20px;}
+.platform-card{
+  background:var(--ivory-deep);padding:26px 18px;text-align:center;border:1px solid var(--line);
+  transition:transform .3s ease;
+}
+.platform-card:nth-child(odd){transform:translateY(-10px);}
+.platform-card:hover{transform:translateY(-16px);}
+.platform-card .ic{width:30px;height:30px;margin:0 auto 12px;color:var(--berry);}
+.platform-card h4{font-family:var(--serif);font-size:1.05rem;margin-bottom:6px;font-weight:400;}
+.platform-card p{font-size:.8rem;color:var(--plum-soft);margin:0;}
+@media(max-width:900px){.platform-field{grid-template-columns:repeat(2,1fr);}.platform-card:nth-child(odd){transform:none;}}
+
+/* ============ CONTACT ============ */
+#contact.section{background:var(--plum);color:var(--ivory);padding:clamp(70px,11vw,140px) 0;overflow:hidden;position:relative;}
+#contact.section::before{
+  content:'';position:absolute;width:380px;height:380px;border-radius:50%;
+  background:var(--berry);opacity:.35;top:-140px;left:-140px;
+}
+#contact.section::after{
+  content:'';position:absolute;width:300px;height:300px;border-radius:50%;
+  background:var(--lavender);opacity:.2;bottom:-120px;right:-100px;
+}
+.contact-section{position:relative;z-index:2;text-align:center;max-width:720px;margin:0 auto;}
+.contact-line{font-family:var(--serif-2);font-style:italic;font-size:clamp(1.05rem,2.2vw,1.3rem);margin:18px auto 36px;color:var(--lavender-soft);max-width:52ch;}
+.contact-name{font-family:var(--serif);color:#fff;font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.1;margin-bottom:0;}
+.contact-person{font-family:var(--serif-2);font-style:italic;font-size:1.2rem;margin:26px 0 4px;color:var(--lavender-soft);}
+.contact-details{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;margin:18px 0 40px;font-size:.95rem;}
+.contact-details a{border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:3px;transition:border-color .3s ease;color:#fff;}
+.contact-details a:hover{border-color:var(--butter);}
+.contact-cta{
+  display:inline-flex;align-items:center;gap:10px;background:var(--lavender);color:var(--plum);
+  padding:14px 34px;border-radius:999px;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;
+  transition:transform .3s ease, background .3s ease;
+}
+.contact-cta:hover{transform:translateY(-3px);background:var(--rose);}
+footer{text-align:center;padding:36px 0 20px;font-size:.75rem;color:var(--plum-soft);background:var(--plum);position:relative;z-index:2;}
+
+/* ============ EDITABLE / ADMIN MODE ============ */
+[data-edit]{outline:1px dashed transparent;outline-offset:4px;border-radius:4px;transition:outline-color .2s ease, background .2s ease;}
+body.admin [data-edit]{outline-color:rgba(124,47,76,.35);}
+body.admin [data-edit]:hover{background:rgba(201,183,220,.18);}
+body.admin [contenteditable="true"]:focus{outline:2px solid var(--berry);background:rgba(201,183,220,.22);}
+.upload-zone{cursor:default;}
+body.admin .upload-zone{cursor:pointer;}
+.upload-overlay{
+  position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:6px;
+  background:rgba(43,22,34,.55);color:#fff;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;z-index:5;
+}
+body.admin .upload-zone:hover .upload-overlay{display:flex;}
+.slot-delete{
+  position:absolute;top:6px;right:6px;z-index:6;background:rgba(43,22,34,.7);color:#fff;border:none;
+  width:22px;height:22px;border-radius:50%;font-size:.75rem;display:none;align-items:center;justify-content:center;
+}
+body.admin .upload-zone:hover .slot-delete{display:flex;}
+.admin-toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(120%);
+  background:var(--plum);color:var(--ivory);padding:12px 22px;border-radius:999px;font-size:.8rem;z-index:900;
+  transition:transform .4s ease;box-shadow:var(--shadow);
+}
+.admin-toast.show{transform:translateX(-50%) translateY(0);}
+.url-input{
+  width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;font-family:var(--sans);font-size:.85rem;
+  background:#fff;color:var(--plum);margin-top:6px;display:none;
+}
+body.admin .url-input{display:inline-block;}
+
+/* ============ EDIT MODE TOGGLE + DESIGN PANEL ============ */
+.edit-mode-toggle{
+  display:none;
+  position:fixed;bottom:22px;right:22px;z-index:700;
+  background:var(--berry);color:#fff;border:none;padding:12px 20px;border-radius:999px;
+  font-size:.78rem;letter-spacing:1px;text-transform:uppercase;box-shadow:0 12px 28px -10px rgba(43,22,34,.55);
+  transition:background .3s ease, transform .3s ease;
+}
+body.logged-in .edit-mode-toggle{display:inline-block;}
+.edit-mode-toggle:hover{transform:translateY(-2px);background:var(--plum);}
+body.admin .edit-mode-toggle{background:var(--plum);color:var(--butter);}
+.design-panel{
+  position:fixed;bottom:80px;right:22px;z-index:700;width:280px;max-width:calc(100vw - 40px);
+  background:var(--ivory);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  display:none;flex-direction:column;overflow:hidden;
+}
+body.admin .design-panel.open{display:flex;}
+.design-panel-head{
+  display:flex;align-items:center;justify-content:space-between;padding:14px 16px;
+  background:var(--plum);color:var(--ivory);font-family:var(--serif);font-size:1.05rem;
+}
+.design-panel-head button{background:none;border:none;color:var(--ivory);font-size:1.3rem;line-height:1;padding:0;}
+.design-panel-body{padding:16px;display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow-y:auto;}
+.design-field{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--plum-soft);}
+.design-field select{font-family:var(--sans);font-size:.78rem;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--plum);max-width:150px;}
+.design-field input[type="color"]{width:40px;height:30px;border:1px solid var(--line);border-radius:6px;padding:0;background:none;cursor:pointer;}
+.design-panel-hint{font-size:.72rem;color:var(--plum-soft);line-height:1.5;margin:4px 0 0;border-top:1px solid var(--line);padding-top:10px;}
+.reel-upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.reel-upload-btn{display:none;background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.72rem;color:var(--plum-soft);}
+body.admin .reel-upload-btn{display:inline-block;}
+
+/* ============ LOGIN MODAL ============ */
+.login-modal{
+  position:fixed;inset:0;z-index:950;background:rgba(43,22,34,.55);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.login-modal.open{display:flex;}
+.login-box{
+  background:var(--ivory);border-radius:6px 30px 6px 30px;box-shadow:var(--shadow);
+  padding:32px 28px;width:100%;max-width:320px;text-align:center;
+}
+.login-box h3{font-size:1.5rem;margin-bottom:6px;}
+.login-box p{font-size:.82rem;color:var(--plum-soft);margin:0 0 16px;}
+.login-box input{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+  font-family:var(--sans);font-size:.9rem;margin-bottom:10px;background:#fff;color:var(--plum);
+}
+.login-box .cta-btn{width:100%;justify-content:center;margin-bottom:8px;border:none;}
+.login-box .login-cancel{background:none;border:none;color:var(--plum-soft);font-size:.78rem;text-decoration:underline;cursor:pointer;}
+.login-error{color:var(--berry);font-size:.78rem;margin:-2px 0 10px;display:none;}
+.login-error.show{display:block;}
+
+/* ============ FREE ELEMENTS (stickers / pasted images) ============ */
+#freeElementsLayer{position:absolute;top:0;left:0;width:100%;height:0;overflow:visible;z-index:150;}
+.free-el{
+  position:absolute;pointer-events:none;
+}
+.free-el .free-el-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;user-select:none;}
+.free-el img{width:100%;height:100%;object-fit:contain;pointer-events:none;}
+.free-el-delete,.free-el-resize{display:none;}
+body.admin .free-el{pointer-events:auto;cursor:move;outline:1px dashed transparent;border-radius:4px;}
+body.admin .free-el:hover{outline-color:rgba(124,47,76,.5);}
+body.admin .free-el .free-el-delete{
+  display:flex;position:absolute;top:-10px;right:-10px;width:22px;height:22px;border-radius:50%;
+  background:var(--plum);color:#fff;border:none;align-items:center;justify-content:center;font-size:.75rem;z-index:2;
+}
+body.admin .free-el .free-el-resize{
+  display:block;position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;border-radius:50%;
+  background:var(--berry);border:2px solid #fff;cursor:nwse-resize;z-index:2;
+}
+.sticker-palette{display:flex;flex-wrap:wrap;gap:6px;}
+.sticker-pick{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.sticker-pick:hover{background:var(--lavender-soft);}
+
+/* per-element animations */
+.free-el.anim-float{animation:elFloat 3.5s ease-in-out infinite;}
+.free-el.anim-pulse .free-el-inner{animation:elPulse 2s ease-in-out infinite;}
+.free-el.anim-spin .free-el-inner{animation:elSpin 6s linear infinite;}
+.free-el.anim-bounce{animation:elBounce 1.4s ease-in-out infinite;}
+.free-el.anim-sway{animation:elSway 3s ease-in-out infinite;}
+.free-el.anim-wiggle{animation:elWiggle 1.2s ease-in-out infinite;}
+.free-el.anim-blink{animation:elBlink 2.4s ease-in-out infinite;}
+@keyframes elFloat{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-10px) rotate(var(--r,0deg));}}
+@keyframes elPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+@keyframes elSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes elBounce{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-16px) rotate(var(--r,0deg));}}
+@keyframes elSway{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
+@keyframes elWiggle{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+@keyframes elBlink{0%,100%{opacity:1;}50%{opacity:.35;}}
+.free-el-anim-select{
+  display:none;position:absolute;top:-10px;left:-10px;transform:translateX(-100%);
+  font-size:.62rem;padding:2px 4px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--plum);max-width:90px;
+}
+body.admin .free-el .free-el-anim-select{display:block;}
+
+/* per-box continuous animations (same keyframes as stickers, reused
+   here for cards/photos/boxes chosen in Style-Click Mode) */
+[data-box].box-anim-float{animation:elFloat 3.5s ease-in-out infinite;}
+[data-box].box-anim-pulse{animation:elPulse 2s ease-in-out infinite;}
+[data-box].box-anim-spin{animation:elSpin 6s linear infinite;}
+[data-box].box-anim-sway{animation:elSway 3s ease-in-out infinite;}
+[data-box].box-anim-wiggle{animation:elWiggle 1.2s ease-in-out infinite;}
+[data-box].box-anim-blink{animation:elBlink 2.4s ease-in-out infinite;}
+
+/* ============ PER-ELEMENT STYLE ENGINE (Style-Click Mode) ============
+   When active, clicking any text or box opens a small popover to change
+   just that one item's font/colour/animation — nothing else on the page. */
+body.style-mode [data-edit],
+body.style-mode [data-box]{cursor:pointer;}
+body.style-mode [data-edit]{outline:1px dashed rgba(159,174,142,.7) !important;outline-offset:3px;}
+body.style-mode [data-edit]:hover{background:rgba(159,174,142,.18);}
+body.style-mode [data-box]{outline:2px dashed rgba(124,47,76,.45);outline-offset:2px;}
+body.style-mode [data-box]:hover{outline-color:rgba(124,47,76,.85);}
+/* while styling, keep clicks focused on styling — don't let them also
+   trigger uploads/deletes underneath */
+body.style-mode [data-clear],
+body.style-mode [data-delete-project],
+body.style-mode .free-el-delete,
+body.style-mode .free-el-resize,
+body.style-mode .upload-overlay,
+body.style-mode .reel-upload-btn{pointer-events:none;}
+.style-mode-toggle{
+  width:100%;border:1px solid var(--berry);background:#fff;color:var(--berry);
+  padding:10px 14px;border-radius:8px;font-size:.78rem;letter-spacing:.5px;text-transform:uppercase;
+  transition:background .25s ease, color .25s ease;
+}
+.style-mode-toggle.on{background:var(--berry);color:#fff;}
+.style-mode-hint{font-size:.72rem;color:var(--plum-soft);line-height:1.5;margin:0;}
+.el-style-pop{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%);
+  width:300px;max-width:calc(100vw - 32px);max-height:70vh;overflow-y:auto;
+  background:var(--ivory);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  z-index:950;padding:16px;font-family:var(--sans);
+}
+.el-pop-close{
+  position:absolute;top:10px;right:12px;background:none;border:none;font-size:1.3rem;line-height:1;
+  color:var(--plum-soft);padding:0;
+}
+.el-style-pop h4{font-family:var(--serif);font-size:1.05rem;margin:0 0 10px;padding-right:20px;color:var(--plum);}
+.el-pop-block{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+.el-pop-block:first-of-type{border-top:none;padding-top:0;margin-top:0;}
+.el-pop-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--berry);margin:0;}
+.el-pop-block label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--plum-soft);}
+.el-pop-block select{font-family:var(--sans);font-size:.78rem;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--plum);max-width:170px;}
+.el-pop-block input[type="color"]{width:40px;height:30px;border:1px solid var(--line);border-radius:6px;padding:0;background:none;cursor:pointer;}
+.el-pop-reset{align-self:flex-start;background:none;border:none;color:var(--berry);font-size:.75rem;text-decoration:underline;padding:0;}
+@media(max-width:480px){.el-style-pop{left:16px;right:16px;transform:none;width:auto;}}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <button class="logo" id="logoTrigger" aria-label="Toggle edit mode (5 quick clicks)">MANSI<em>.</em></button>
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#what-i-do">What I Do</a>
+      <a href="#why-me">Why Me</a>
+      <a href="#work">Work</a>
+      <a href="#project">Project</a>
+      <a href="#tools">Tools</a>
+      <a href="#editing">Editing</a>
+      <a href="#platforms">Platforms</a>
+      <a href="#contact" class="cta-btn">Let's Connect</a>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose" aria-label="Close menu">×</button>
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#what-i-do">What I Do</a>
+  <a href="#why-me">Why Me</a>
+  <a href="#work">Work</a>
+  <a href="#project">Project</a>
+  <a href="#tools">Tools</a>
+  <a href="#editing">Editing</a>
+  <a href="#platforms">Platforms</a>
+  <a href="#contact">Let's Connect</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <svg class="hero-deco deco-star" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.1 6.9L12 15.8 6.5 19.8l2.1-6.9L3 8.8h6.8L12 2z" fill="#DFA9A7"/></svg>
+  <svg class="hero-deco deco-sparkle" viewBox="0 0 24 24" fill="none"><path d="M12 3c.5 3.5 2 5 5.5 5.5-3.5.5-5 2-5.5 5.5-.5-3.5-2-5-5.5-5.5C10 8 11.5 6.5 12 3z" fill="#C9B7DC"/></svg>
+  <svg class="hero-deco deco-camera" viewBox="0 0 24 24" fill="none" stroke="#7C2F4C" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l1.5-2.5h5L16 7"/></svg>
+  <svg class="hero-deco deco-phone" viewBox="0 0 24 24" fill="none" stroke="#9FAE8E" stroke-width="1.4"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="10" y1="19" x2="14" y2="19"/></svg>
+
+  <div class="container hero-inner">
+    <div class="hero-label hero-fade-item">
+      <span class="eyebrow" data-edit="hero.label">social media manager</span> <span style="color:var(--berry)">✦</span>
+    </div>
+    <div class="hero-name-wrap hero-fade-item">
+      <h1 class="hero-name">MANSI SANKHLA</h1>
+    </div>
+    <p class="hero-sub hero-fade-item">Social Media Portfolio</p>
+    <p class="hero-statement hero-fade-item sub-italic" data-edit="hero.statement">"Turning ideas into content people want to stop and look at."</p>
+    <a href="#about" class="hero-cta hero-fade-item">Explore My Work ↓</a>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="container about-grid">
+    <div class="reveal">
+      <figure class="polaroid" data-box="about.photo">
+        <div class="photo-slot upload-zone" id="aboutPhotoZone">
+          <span id="aboutPhotoPlaceholder">click to add photo</span>
+          <div class="upload-overlay"><span>Click to replace photo</span></div>
+          <button class="slot-delete" data-clear="about.photo" aria-label="Remove photo">×</button>
+        </div>
+        <input type="file" accept="image/*" id="aboutPhotoInput" style="display:none">
+        <figcaption>that's me ✦</figcaption>
+      </figure>
+    </div>
+    <div class="about-copy reveal">
+      <span class="eyebrow">get to know me</span>
+      <h2 class="section-title" style="margin-top:14px;">A Little About Me</h2>
+      <div style="margin-top:22px;">
+        <p data-edit="about.p1" contenteditable="false">I'm a social media manager and content-focused creative who loves turning simple ideas into content that actually gets noticed. Most recently, I worked with Catchy Climbers Marketing Agency, where I handled a client's social media page end-to-end — planning their content calendar, building post and reel concepts, and shaping a voice that felt consistent across every platform.</p>
+        <p data-edit="about.p2" contenteditable="false">Alongside strategy and management, I also edit video — cutting raw footage into short, polished pieces built to hold attention. I enjoy sitting at the intersection of planning and making: thinking through the strategy, then actually building the content myself.</p>
+        <p data-edit="about.p3" contenteditable="false">For me, good social media is where creativity, strategy and storytelling meet — and that combination is what I bring to every brand I work with.</p>
+      </div>
+      <span class="about-quote" data-edit="about.quote">good content is a little bit of magic and a lot of intention.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT I BRING TO THE TABLE ============ -->
+<section class="section" id="what-i-do" style="background:var(--ivory-deep);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">what I do best ✦</span>
+      <h2 class="section-title" style="margin-top:14px;">What I Bring To The Table</h2>
+    </div>
+    <div class="services-grid" id="servicesGrid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY ME ============ -->
+<section class="section" id="why-me">
+  <div class="container">
+    <div class="section-head reveal" style="max-width:560px;">
+      <h2 class="section-title">Why Me?</h2>
+      <p class="sub-italic">"Because good content isn't just pretty. It should have a point."</p>
+    </div>
+    <div class="why-wrap" id="whyGrid">
+      <!-- injected by JS -->
+    </div>
+    <p class="why-flow reveal">Strategy → Creative → Impact</p>
+  </div>
+</section>
+
+<!-- ============ RECENT WORK ============ -->
+<section class="section" id="work" style="background:var(--ivory-deep);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">a few things I've been creating ✦</span>
+      <h2 class="section-title" style="margin-top:14px;">Recent Work</h2>
+    </div>
+    <div id="projectsWrap"></div>
+    <div class="add-project-row"><button class="ghost-btn" id="addProjectBtn" style="display:none;">+ Add New Project</button></div>
+  </div>
+</section>
+
+<!-- ============ TOOLS ============ -->
+<section class="section tools-section" id="tools">
+  <div class="container">
+    <span class="eyebrow">what's in my bag ✦</span>
+    <h2 class="section-title" style="margin-top:14px;">What's In My Bag?</h2>
+    <p class="sub-italic" style="margin-top:10px;">The tools I work with.</p>
+    <div class="tools-stage" id="toolsStage">
+      <button class="table-graphic" id="tableBtn"><span>tap<br>the bag</span></button>
+      <div class="tool-badge" data-tool="canva" tabindex="0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#7C2F4C" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M8 13c1 1.5 2.5 2 4 1s2-2.5 1-4-2.5-1.5-3.5 0"/></svg><span>Canva</span><span class="tool-tooltip">Quick, clean graphics and templates for posts, reels covers and stories.</span></div>
+      <div class="tool-badge" data-tool="capcut" tabindex="0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#7C2F4C" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9l6 3-6 3z"/></svg><span>CapCut</span><span class="tool-tooltip">Cutting, pacing and transitions for short-form reels that keep people watching.</span></div>
+      <div class="tool-badge" data-tool="adobe" tabindex="0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#7C2F4C" stroke-width="1.4"><path d="M6 4h5l7 16h-4l-1.5-3.5h-6L5 20H2z"/></svg><span>Adobe</span><span class="tool-tooltip">Finer edits, colour grading and detailed video/photo polish.</span></div>
+      <div class="tool-badge" data-tool="chatgpt" tabindex="0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#7C2F4C" stroke-width="1.4"><path d="M12 3a5 5 0 00-5 5v1a4 4 0 00-2 7 4 4 0 003 5h1a5 5 0 004-2 5 5 0 004 2h1a4 4 0 003-5 4 4 0 00-2-7V8a5 5 0 00-5-5z"/></svg><span>ChatGPT</span><span class="tool-tooltip">Brainstorming captions, hooks and content ideas faster.</span></div>
+      <div class="tool-badge" data-tool="inshot" tabindex="0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#7C2F4C" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg><span>InShot</span><span class="tool-tooltip">On-the-go trims, captions and quick exports from mobile.</span></div>
+    </div>
+    <p class="tools-hint">tap the bag to see what's inside ✦</p>
+  </div>
+</section>
+
+<!-- ============ EDITING SHOWCASE ============ -->
+<section class="section" id="editing" style="background:var(--ivory-deep);">
+  <div class="container" style="text-align:center;">
+    <span class="eyebrow">the edit ✦</span>
+    <h2 class="section-title" style="margin-top:14px;">Before &amp; After</h2>
+    <div class="edit-row">
+      <div class="compare-group">
+        <h4>Reel</h4>
+        <div class="compare-box reel-ratio" id="compareReel" data-box="editing.reel">
+          <img class="compare-layer before upload-zone" id="reelBeforeImg" data-slot="editing.reelBefore">
+          <img class="compare-layer after upload-zone" id="reelAfterImg" data-slot="editing.reelAfter">
+          <span class="compare-tag before-tag">Before</span>
+          <span class="compare-tag after-tag">After</span>
+          <div class="compare-handle" id="reelHandle"></div>
+        </div>
+        <input type="file" accept="image/*" id="reelBeforeInput" style="display:none">
+        <input type="file" accept="image/*" id="reelAfterInput" style="display:none">
+        <p class="compare-note" data-edit="editing.reelNote" contenteditable="false">Add a line or two about this edit here.</p>
+      </div>
+      <div class="compare-group">
+        <h4>Post</h4>
+        <div class="compare-box post-ratio" id="comparePost" data-box="editing.post">
+          <img class="compare-layer before upload-zone" id="postBeforeImg" data-slot="editing.postBefore">
+          <img class="compare-layer after upload-zone" id="postAfterImg" data-slot="editing.postAfter">
+          <span class="compare-tag before-tag">Before</span>
+          <span class="compare-tag after-tag">After</span>
+          <div class="compare-handle" id="postHandle"></div>
+        </div>
+        <input type="file" accept="image/*" id="postBeforeInput" style="display:none">
+        <input type="file" accept="image/*" id="postAfterInput" style="display:none">
+        <p class="compare-note" data-edit="editing.postNote" contenteditable="false">Add a line or two about this edit here.</p>
+      </div>
+    </div>
+    <p class="edit-connector reveal">Raw → Edited</p>
+    <p style="max-width:420px;margin:14px auto 0;color:var(--plum-soft);font-size:.85rem;">Drag left/right across each frame to compare. <span id="editHint" style="display:none;">(Admin: click a frame to upload that side's image.)</span></p>
+  </div>
+</section>
+
+<!-- ============ PLATFORMS ============ -->
+<section class="section" id="platforms">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">everywhere I show up ✦</span>
+      <h2 class="section-title" style="margin-top:14px;">Platforms</h2>
+    </div>
+    <div class="platform-field" id="platformGrid"></div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-section reveal" data-box="contact.card">
+      <span class="eyebrow" style="color:var(--butter);">let's make something ✦</span>
+      <h2 class="contact-name" style="margin-top:16px;">Let's Create Something People Remember</h2>
+      <p class="contact-line" data-edit="contact.line">Have an idea, a brand or a story that deserves to be seen? Let's turn it into something worth stopping for.</p>
+      <div class="contact-details">
+        <a id="contactEmailLink" href="mailto:sankhlamansi723@gmail.com">Email — <span data-edit="contact.email">sankhlamansi723@gmail.com</span></a>
+        <a id="contactInstaLink" href="https://instagram.com/thatgirlmansi" target="_blank" rel="noopener">Instagram — <span data-edit="contact.instagram">@thatgirlmansi</span></a>
+        <span>Phone — <span data-edit="contact.phone">9462653296</span></span>
+      </div>
+      <a href="mailto:sankhlamansi723@gmail.com" class="contact-cta">Let's Connect →</a>
+    </div>
+    <footer>Designed &amp; built with intention. © <span id="year"></span> Mansi Sankhla.</footer>
+  </div>
+</section>
+
+<div class="admin-toast" id="adminToast">Edit mode on — click text or photos to update. Click the logo 5× to exit.</div>
+
+<!-- ============ LOGIN MODAL (click the logo 5× to open) ============ -->
+<div class="login-modal" id="loginModal">
+  <div class="login-box">
+    <h3>Admin Login</h3>
+    <p>Log in to edit this site. Visitors never see this.</p>
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <p class="login-error" id="loginError">Incorrect password — try again.</p>
+    <button class="cta-btn" id="loginSubmit">Unlock Editing</button>
+    <button class="login-cancel" id="loginCancel">Cancel</button>
+  </div>
+</div>
+
+<!-- ============ EDIT MODE TOGGLE + DESIGN PANEL ============ -->
+<button id="editModeToggle" class="edit-mode-toggle">✎ Edit Site</button>
+
+<div id="designPanel" class="design-panel">
+  <div class="design-panel-head">
+    <span>Design Panel</span>
+    <button id="designPanelClose" aria-label="Close design panel">×</button>
+  </div>
+  <div class="design-panel-body">
+    <label class="design-field">
+      <span>Font pairing</span>
+      <select id="fontSelect">
+        <option value="default">Serif Display + Sans (default)</option>
+        <option value="playfair">Playfair Display + Poppins</option>
+        <option value="classic">Georgia + Verdana (classic)</option>
+        <option value="modern">Poppins + Poppins (modern)</option>
+        <option value="handwritten">Caveat + Sans (playful script)</option>
+        <option value="editorial">Cormorant Garamond + Sans (editorial)</option>
+        <option value="elegant">Cormorant + Josefin Sans (elegant)</option>
+        <option value="minimal">Inter + Inter (minimal)</option>
+        <option value="bold">Bebas Neue + Work Sans (bold)</option>
+        <option value="luxury">Marcellus + Jost (luxury)</option>
+        <option value="romantic">Italiana + Lora (romantic)</option>
+        <option value="tech">Space Grotesk (tech / clean)</option>
+        <option value="warm">Fraunces + Nunito Sans (warm)</option>
+        <option value="dramatic">Abril Fatface + Karla (dramatic)</option>
+        <option value="vintage">Prata + Quicksand (vintage)</option>
+        <option value="playful">Pacifico + Nunito (playful)</option>
+      </select>
+    </label>
+    <label class="design-field">
+      <span>Background colour</span>
+      <input type="color" id="colorIvory" value="#FAF5ED">
+    </label>
+    <label class="design-field">
+      <span>Text / heading colour</span>
+      <input type="color" id="colorPlum" value="#2B1622">
+    </label>
+    <label class="design-field">
+      <span>Accent colour (buttons, links)</span>
+      <input type="color" id="colorBerry" value="#7C2F4C">
+    </label>
+    <label class="design-field">
+      <span>Bag colour (top)</span>
+      <input type="color" id="colorBagC1" value="#ECCB80">
+    </label>
+    <label class="design-field">
+      <span>Bag colour (bottom)</span>
+      <input type="color" id="colorBagC2" value="#EFC5A0">
+    </label>
+    <button id="resetThemeBtn" class="ghost-btn" style="width:100%;margin-top:6px;">Reset to defaults</button>
+
+    <div class="design-field" style="flex-direction:column;align-items:flex-start;gap:8px;border-top:1px solid var(--line);padding-top:14px;">
+      <span>Style one section at a time</span>
+      <select id="sectionThemeSelect" style="width:100%;max-width:none;">
+        <option value="nav">Navigation Bar</option>
+        <option value="home">Hero</option>
+        <option value="about">About</option>
+        <option value="what-i-do">What I Do</option>
+        <option value="why-me">Why Me</option>
+        <option value="work">Recent Work</option>
+        <option value="tools">Tools</option>
+        <option value="editing">Before &amp; After</option>
+        <option value="platforms">Platforms</option>
+        <option value="contact">Contact / Footer</option>
+      </select>
+      <label class="design-field" style="width:100%;">
+        <span>Background</span>
+        <input type="color" id="sectionBgColor">
+      </label>
+      <label class="design-field" style="width:100%;">
+        <span>Text</span>
+        <input type="color" id="sectionTextColor">
+      </label>
+      <button id="sectionThemeReset" class="ghost-btn" style="width:100%;">Reset this section only</button>
+    </div>
+
+    <div class="design-field" style="flex-direction:column;align-items:flex-start;gap:8px;border-top:1px solid var(--line);padding-top:14px;">
+      <span>Text reveal animation (site-wide)</span>
+      <select id="textAnimSelect" style="width:100%;max-width:none;">
+        <option value="fadeup">Fade up (default)</option>
+        <option value="fadein">Fade in</option>
+        <option value="slideleft">Slide from left</option>
+        <option value="slideright">Slide from right</option>
+        <option value="zoom">Zoom in</option>
+        <option value="bounce">Bounce in</option>
+      </select>
+      <span>Photo animation (site-wide)</span>
+      <select id="photoAnimSelect" style="width:100%;max-width:none;">
+        <option value="none">None (default)</option>
+        <option value="fade">Fade in on scroll</option>
+        <option value="zoomhover">Zoom on hover</option>
+        <option value="tilt">Tilt on hover</option>
+        <option value="grayscale">Grayscale → colour on hover</option>
+        <option value="float">Gentle float</option>
+      </select>
+    </div>
+
+    <div class="design-field" style="flex-direction:column;align-items:flex-start;gap:8px;border-top:1px solid var(--line);padding-top:14px;">
+      <span>Style ONE text or box at a time</span>
+      <button id="styleModeToggle" class="style-mode-toggle" type="button">🎯 Style-Click Mode: OFF</button>
+      <p class="style-mode-hint">Turn this on, then click any single word/paragraph on the page to change just its font &amp; colour — or click a coloured box (like a Why Me card) to change just that box's colour &amp; animation. Turn it off to go back to normal editing.</p>
+    </div>
+
+    <div class="design-field" style="flex-direction:column;align-items:flex-start;gap:8px;border-top:1px solid var(--line);padding-top:14px;">
+      <span>Stickers — click to drop one on the page</span>
+      <div class="sticker-palette" id="stickerPalette">
+        <button class="sticker-pick" data-emoji="✦">✦</button>
+        <button class="sticker-pick" data-emoji="✨">✨</button>
+        <button class="sticker-pick" data-emoji="💫">💫</button>
+        <button class="sticker-pick" data-emoji="🌸">🌸</button>
+        <button class="sticker-pick" data-emoji="🎀">🎀</button>
+        <button class="sticker-pick" data-emoji="📸">📸</button>
+        <button class="sticker-pick" data-emoji="💌">💌</button>
+        <button class="sticker-pick" data-emoji="🌷">🌷</button>
+        <button class="sticker-pick" data-emoji="⭐">⭐</button>
+        <button class="sticker-pick" data-emoji="🎬">🎬</button>
+      </div>
+      <button id="addImageElBtn" class="ghost-btn" style="width:100%;">+ Paste an image anywhere</button>
+      <input type="file" id="freeImageInput" accept="image/*" style="display:none;">
+    </div>
+
+    <button id="downloadSiteBtn" class="cta-btn" style="width:100%;justify-content:center;margin-top:14px;border:none;">⬇ Download Updated Site</button>
+    <button id="logoutBtn" class="login-cancel" style="width:100%;margin-top:10px;">Log out</button>
+    <p class="design-panel-hint">Tip: with Edit Site on, click any text to edit it, click any photo/grid square to upload from your device, use "+ Add New Project" in Recent Work, style any section's colours individually above, pick a site-wide text/photo animation, or turn on "Style-Click Mode" above to change just ONE text's font/colour or ONE box's colour/animation. Drag stickers/images anywhere once you've dropped them (each one has its own tiny animation dropdown too). When you're done, hit "Download Updated Site" and upload that file to your host — that's the only way your edits become visible to everyone else.</p>
+  </div>
+</div>
+
+<script id="savedStateScript">window.__SAVED_STATE__ = null;</script>
+<script>
+(function(){
+/* ======================================================
+   STATE + DEFAULTS
+====================================================== */
+const DEFAULTS = {
+  theme:{
+    font:'default',
+    ivory:'#FAF5ED',
+    plum:'#2B1622',
+    berry:'#7C2F4C',
+    bagC1:'#ECCB80',
+    bagC2:'#EFC5A0'
+  },
+  hero: {
+    label:'social media manager',
+    statement:'"Turning ideas into content people want to stop and look at."'
+  },
+  about: {
+    p1:"I'm a social media manager and content-focused creative who loves turning simple ideas into content that actually gets noticed. Most recently, I worked with Catchy Climbers Marketing Agency, where I handled a client's social media page end-to-end — planning their content calendar, building post and reel concepts, and shaping a voice that felt consistent across every platform.",
+    p2:"Alongside strategy and management, I also edit video — cutting raw footage into short, polished pieces built to hold attention. I enjoy sitting at the intersection of planning and making: thinking through the strategy, then actually building the content myself.",
+    p3:"For me, good social media is where creativity, strategy and storytelling meet — and that combination is what I bring to every brand I work with.",
+    quote:"good content is a little bit of magic and a lot of intention.",
+    photo:''
+  },
+  services:[
+    {title:'Social Media Management',desc:'Planning, scheduling and managing day-to-day content across platforms with a clear voice and strategy.'},
+    {title:'Video Editing',desc:'Turning raw clips into engaging, polished short-form videos designed to keep people watching.'},
+    {title:'Content Strategy',desc:'Building content ideas around the brand, audience and goals so every post has a purpose.'},
+    {title:'Creative Direction',desc:'Shaping the look, feel and storytelling of content so the brand feels consistent and memorable.'},
+    {title:'Brand Positioning',desc:'Finding the right tone, visual direction and content personality to help a brand stand out.'}
+  ],
+  whyMe:[
+    {title:'Strategy First',desc:'Before creating content, I like to understand the brand, the audience and the bigger picture.',tag:'Think first. Post smarter. ✦'},
+    {title:'Creative Execution',desc:'I turn ideas into visuals, reels and content that feel fresh, intentional and true to the brand.',tag:'Make the idea impossible to ignore.'},
+    {title:'Performance Mindset',desc:'I want content to do more than look good — it should create curiosity, engagement and recognition.',tag:'Pretty gets attention. Purpose keeps it.'}
+  ],
+  platforms:[
+    {name:'Instagram',desc:'Visual storytelling'},
+    {name:'Facebook',desc:'Community & connection'},
+    {name:'Pinterest',desc:'Discovery & inspiration'},
+    {name:'LinkedIn',desc:'Professional storytelling'},
+    {name:'YouTube',desc:'Video storytelling'}
+  ],
+  editing:{reelBefore:'',reelAfter:'',postBefore:'',postAfter:'',reelNote:'Add a line or two about this edit here.',postNote:'Add a line or two about this edit here.'},
+  contact:{line:"Have an idea, a brand or a story that deserves to be seen? Let's turn it into something worth stopping for.",name:'Mansi Sankhla',instagram:'@thatgirlmansi',email:'sankhlamansi723@gmail.com',phone:'9462653296'},
+  projects:[
+    {
+      id:'p1', name:'Kakke di Hatti', location:'Gandhinagar', industry:'Cafe', platform:'Instagram',
+      description:'A mock social feed built to explore how a neighbourhood cafe could show up on Instagram — from feed aesthetic to captions to content rhythm.',
+      brief:'While working as a social media manager at Catchy Climbers Marketing Agency, I handled a client\'s Instagram page — building out post and reel concepts, planning the feed and shaping captions that matched the brand\'s personality. Kakke di Hatti is a mock version of that same approach: I imagined it as a real neighbourhood cafe and gave it the same care I\'d give any client, from feed rhythm down to how each caption sounds out loud.',
+      goal:'Design a warm, consistent feed presence that makes a small local cafe feel inviting online, and turn casual scrollers into regulars.',
+      approach:'Planned a simple content mix of drinks, ambience and behind-the-counter moments, then built out a cohesive grid, a sample reel and supporting captions to match.',
+      image:'', grid:['','','','','','','','',''], story:'', storyMode:true, post:'',
+      reels:[
+        {url:'', caption:'A short reel concept showing the drink-making process, cut for pace and rhythm.'},
+        {url:'', caption:'A second reel — a different angle or format for the same project.'}
+      ],
+      note:'Please note: this is a passion project — a mock feed. This is not a real cafe.'
+    }
+  ],
+  freeElements: [],
+  sectionThemes: {},
+  animations: { text:'fadeup', photo:'none' },
+  elementStyles: {},
+  boxStyles: {}
+};
+
+const PLATFORM_ICONS = {
+  Instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/>',
+  Facebook:'<path d="M14 22v-8h3l.5-4H14V7.5c0-1.2.3-2 2-2h1.6V2.1C17.3 2 16.1 2 14.7 2 11.8 2 10 3.8 10 7v3H7v4h3v8z"/>',
+  Pinterest:'<circle cx="12" cy="12" r="9"/><path d="M9 20c1-3 1.6-6 2.2-8.8C11 10 11 8.5 12.2 8.5c1.4 0 1.6 1.3 1.3 2.6-.4 1.7-1 3-.9 4.3.1 1.4 1.6 2 2.8 1.2 1.6-1 2.2-3.4 2.2-5.2 0-2.8-2.1-5-5.4-5-3.9 0-6 2.7-6 5.6 0 1.1.4 2.3 1.1 2.9"/>',
+  LinkedIn:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8.5" r="1.2"/><line x1="8" y1="11.5" x2="8" y2="17"/><path d="M11.5 17v-3.2c0-1.7 1-2.6 2.3-2.6 1.2 0 1.9.8 1.9 2.6V17"/>',
+  YouTube:'<rect x="3" y="5.5" width="18" height="13" rx="4"/><path d="M10 9.5l5 2.5-5 2.5z" fill="#7C2F4C" stroke="none"/>'
+};
+
+let state = JSON.parse(JSON.stringify(DEFAULTS));
+let adminMode = false;
+let saveTimer = null;
+
+function deepMerge(base, extra){
+  if(Array.isArray(base)) return (extra && extra.length) ? extra : base;
+  if(typeof base === 'object' && base !== null){
+    const out = {...base};
+    if(extra && typeof extra === 'object'){
+      const keys = new Set([...Object.keys(base), ...Object.keys(extra)]);
+      keys.forEach(k=>{ out[k] = deepMerge(base[k], extra[k]); });
+    }
+    return out;
+  }
+  return (extra !== undefined && extra !== null && extra !== '') ? extra : base;
+}
+
+async function loadState(){
+  try{
+    if(window.__SAVED_STATE__){
+      state = deepMerge(DEFAULTS, window.__SAVED_STATE__);
+    }
+    const raw = localStorage.getItem('mansi-portfolio-data');
+    if(raw){
+      const saved = JSON.parse(raw);
+      state = deepMerge(state, saved);
+    }
+  }catch(e){ /* no saved data yet — use defaults */ }
+  renderAll();
+}
+
+/* Bakes the current state into the page and downloads it as a new
+   HTML file. This is how edits become visible to every visitor —
+   localStorage only saves changes inside the browser that made them,
+   so after editing, download this file and re-upload it wherever the
+   site is hosted, replacing the old one. */
+function exportSite(){
+  const wasAdmin = adminMode, wasOpen = document.getElementById('designPanel').classList.contains('open');
+  adminMode = false; applyAdminState();
+  document.getElementById('designPanel').classList.remove('open');
+  closeLoginModal();
+  const scriptEl = document.getElementById('savedStateScript');
+  scriptEl.textContent = 'window.__SAVED_STATE__ = ' + JSON.stringify(state) + ';';
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'mansi-portfolio.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  if(wasAdmin){ adminMode = true; applyAdminState(); }
+  if(wasOpen) document.getElementById('designPanel').classList.add('open');
+  showToast('Downloaded — upload this file to your host to make edits go live for everyone.');
+}
+
+function saveState(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{
+      localStorage.setItem('mansi-portfolio-data', JSON.stringify(state));
+    }catch(e){ console.error('Save failed', e); showToast('Could not save — storage may be full.'); }
+  }, 400);
+}
+
+/* ======================================================
+   RENDER
+====================================================== */
+function renderAll(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+  applyTheme();
+  applySectionThemes();
+  applyAnimSettings();
+  bindText('hero.label', state.hero.label);
+  bindText('hero.statement', state.hero.statement);
+  bindText('about.p1', state.about.p1);
+  bindText('about.p2', state.about.p2);
+  bindText('about.p3', state.about.p3);
+  bindText('about.quote', state.about.quote);
+  bindText('contact.line', state.contact.line);
+  bindText('contact.name', state.contact.name);
+  bindText('contact.instagram', state.contact.instagram);
+  bindText('contact.email', state.contact.email);
+  bindText('contact.phone', state.contact.phone);
+  bindText('editing.reelNote', state.editing.reelNote);
+  bindText('editing.postNote', state.editing.postNote);
+  document.getElementById('contactInstaLink').href = 'https://instagram.com/' + state.contact.instagram.replace('@','');
+  document.getElementById('contactEmailLink').href = 'mailto:' + state.contact.email;
+
+  if(state.about.photo){
+    document.getElementById('aboutPhotoPlaceholder').style.display='none';
+    let img = document.getElementById('aboutPhotoImg');
+    if(!img){ img = document.createElement('img'); img.id='aboutPhotoImg'; document.getElementById('aboutPhotoZone').prepend(img); }
+    img.src = state.about.photo;
+  }
+
+  renderServices();
+  renderWhyMe();
+  renderPlatforms();
+  renderProjects();
+  renderEditingImages();
+  renderFreeElements();
+  applyElementStyles();
+  applyBoxStyles();
+  applyAdminState();
+}
+
+function bindText(key, val){
+  document.querySelectorAll('[data-edit="'+key+'"]').forEach(el=>{ if(el.textContent.trim() !== String(val).trim()) el.textContent = val; });
+}
+
+function getPath(obj, path){ return path.split('.').reduce((o,k)=> (o? o[k]: undefined), obj); }
+function setPath(obj, path, val){
+  const parts = path.split('.'); let cur = obj;
+  for(let i=0;i<parts.length-1;i++) cur = cur[parts[i]];
+  cur[parts[parts.length-1]] = val;
+}
+
+function renderServices(){
+  const wrap = document.getElementById('servicesGrid');
+  wrap.innerHTML = state.services.map((s,i)=>`
+    <div class="service-card reveal" data-box="services.${i}">
+      <span class="service-num">${String(i+1).padStart(2,'0')}</span>
+      <h3 data-edit="services.${i}.title" contenteditable="false">${s.title}</h3>
+      <p data-edit="services.${i}.desc" contenteditable="false">${s.desc}</p>
+    </div>`).join('');
+  observeReveals();
+  attachArrayTextHandlers('services');
+  applyElementStyles(); applyBoxStyles();
+}
+
+function renderWhyMe(){
+  const wrap = document.getElementById('whyGrid');
+  wrap.innerHTML = state.whyMe.map((w,i)=>`
+    <div class="why-card reveal" data-box="whyMe.${i}">
+      <span class="why-mark">✦</span>
+      <h3>${String(i+1).padStart(2,'0')} — <span data-edit="whyMe.${i}.title" contenteditable="false">${w.title}</span></h3>
+      <p class="desc" data-edit="whyMe.${i}.desc" contenteditable="false">${w.desc}</p>
+      <p class="tag" data-edit="whyMe.${i}.tag" contenteditable="false">${w.tag}</p>
+    </div>`).join('');
+  observeReveals();
+  attachArrayTextHandlers('whyMe');
+  applyElementStyles(); applyBoxStyles();
+}
+
+function renderPlatforms(){
+  const wrap = document.getElementById('platformGrid');
+  wrap.innerHTML = state.platforms.map((p,i)=>`
+    <div class="platform-card reveal" data-box="platforms.${i}">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">${PLATFORM_ICONS[p.name]||''}</svg>
+      <h4>${p.name}</h4>
+      <p data-edit="platforms.${i}.desc" contenteditable="false">${p.desc}</p>
+    </div>`).join('');
+  observeReveals();
+  attachArrayTextHandlers('platforms');
+  applyElementStyles(); applyBoxStyles();
+}
+
+function renderProjects(){
+  const wrap = document.getElementById('projectsWrap');
+  wrap.innerHTML = state.projects.map((p, idx)=>`
+    <div class="project-block" data-project-index="${idx}">
+      <div class="project-top reveal" data-box="projects.${idx}.top">
+        <div>
+          <p class="project-meta">${p.industry} · ${p.platform}</p>
+          <h3 class="project-title" data-edit="projects.${idx}.name" contenteditable="false">${p.name}</h3>
+          <p class="project-loc" data-edit="projects.${idx}.location" contenteditable="false">${p.location}</p>
+          <p class="project-desc" data-edit="projects.${idx}.description" contenteditable="false">${p.description}</p>
+        </div>
+        <div class="project-brief">
+          <p data-edit="projects.${idx}.brief" contenteditable="false">${p.brief}</p>
+        </div>
+      </div>
+
+      <div class="grid-wrap reveal">
+        
+        ${p.storyMode ? `
+        <div class="insta-story-single upload-zone" data-slot="projects.${idx}.story" id="story-${idx}">
+          ${p.story ? `<img src="${p.story}">` : ''}
+          <div class="upload-overlay"><span>Add Story Screenshot</span></div>
+          <button class="slot-delete" data-clear="projects.${idx}.story">×</button>
+        </div>
+        ` : `
+        <div class="insta-grid">
+          ${p.grid.map((g,gi)=>`
+            <div class="insta-cell upload-zone" data-slot="projects.${idx}.grid.${gi}" id="grid-${idx}-${gi}">
+              ${g ? `<img src="${g}">` : ''}
+              <div class="upload-overlay"><span>Add</span></div>
+              <button class="slot-delete" data-clear="projects.${idx}.grid.${gi}">×</button>
+            </div>`).join('')}
+        </div>
+        `}
+      </div>
+
+      <div class="reel-wrap reveal">
+        ${(p.reels||[]).map((r,ri)=>`
+          <div class="reel-item">
+            <div class="reel-frame" id="reelFrame-${idx}-${ri}">
+              ${r.url ? `<video src="${r.url}" controls playsinline></video>` : `<div class="reel-placeholder">reel preview</div>`}
+            </div>
+            <input type="text" class="url-input reel-url-input" data-project="${idx}" data-reel="${ri}" placeholder="Paste a video URL (mp4 link)…" value="${r.url||''}" style="max-width:340px;">
+            <div class="reel-upload-row">
+              <button class="reel-upload-btn" data-upload-video="${idx}-${ri}">⭱ Upload video from device</button>
+              <input type="file" accept="video/*" class="reel-file-input" data-upload-video-input="${idx}-${ri}" style="display:none;">
+            </div>
+            <p class="reel-caption" data-edit="projects.${idx}.reels.${ri}.caption" contenteditable="false">${r.caption}</p>
+          </div>`).join('')}
+      </div>
+
+      <div class="case-study reveal" data-box="projects.${idx}.case">
+        <div>
+          <div class="case-labels">
+            <div class="case-label"><small>Industry</small><span>${p.industry}</span></div>
+            <div class="case-label"><small>Platform</small><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${PLATFORM_ICONS.Instagram}</svg> ${p.platform}</span></div>
+          </div>
+          <div class="case-field">
+            <h4>Goal</h4>
+            <div class="editable" data-edit="projects.${idx}.goal" contenteditable="false">${p.goal}</div>
+          </div>
+          <div class="case-field">
+            <h4>Approach</h4>
+            <div class="editable" data-edit="projects.${idx}.approach" contenteditable="false">${p.approach}</div>
+          </div>
+          <p class="case-note" data-edit="projects.${idx}.note" contenteditable="false">${p.note}</p>
+        </div>
+        <div class="case-grid">
+          
+          ${p.storyMode ? `
+          <div class="insta-post-single upload-zone" data-slot="projects.${idx}.post" id="post-${idx}">
+            ${p.post ? `<img src="${p.post}">` : ''}
+            <div class="upload-overlay"><span>Add Post</span></div>
+            <button class="slot-delete" data-clear="projects.${idx}.post">×</button>
+          </div>
+          ` : `
+          <div class="insta-grid">
+            ${p.grid.slice(0,9).map((g)=> g ? `<div class="insta-cell"><img src="${g}"></div>` : `<div class="insta-cell"></div>`).join('')}
+          </div>
+          `}
+        </div>
+      </div>
+      <button class="project-delete" data-delete-project="${idx}">Remove this project</button>
+    </div>
+  `).join('');
+  observeReveals();
+  attachArrayTextHandlers('projects');
+  attachUploadZones();
+  attachClearButtons();
+  attachReelUrlInputs();
+  attachProjectDelete();
+  attachReelVideoUploads();
+  applyElementStyles(); applyBoxStyles();
+}
+
+function renderEditingImages(){
+  setImgIfAny('reelBeforeImg', state.editing.reelBefore);
+  setImgIfAny('reelAfterImg', state.editing.reelAfter);
+  setImgIfAny('postBeforeImg', state.editing.postBefore);
+  setImgIfAny('postAfterImg', state.editing.postAfter);
+}
+function setImgIfAny(id, val){
+  const el = document.getElementById(id);
+  if(val){ el.src = val; } else { el.removeAttribute('src'); }
+}
+
+/* ======================================================
+   FREE ELEMENTS — stickers & images placed anywhere on the page
+====================================================== */
+function getFreeElementsLayer(){
+  let layer = document.getElementById('freeElementsLayer');
+  if(!layer){
+    layer = document.createElement('div');
+    layer.id = 'freeElementsLayer';
+    document.body.appendChild(layer);
+  }
+  return layer;
+}
+
+function renderFreeElements(){
+  const layer = getFreeElementsLayer();
+  const ANIMS = ['none','float','pulse','spin','bounce','sway','wiggle','blink'];
+  layer.innerHTML = state.freeElements.map(f=>`
+    <div class="free-el ${f.anim && f.anim!=='none' ? 'anim-'+f.anim : ''}" id="freeEl-${f.id}" style="left:${f.x}px;top:${f.y}px;width:${f.size}px;height:${f.size}px;transform:rotate(${f.rot||0}deg);--r:${f.rot||0}deg;">
+      <div class="free-el-inner">
+        ${f.type === 'sticker'
+          ? `<span style="font-size:${Math.round(f.size*0.72)}px;line-height:1;">${f.content}</span>`
+          : `<img src="${f.content}" draggable="false">`}
+      </div>
+      <select class="free-el-anim-select" data-el-anim="${f.id}">
+        ${ANIMS.map(a=>`<option value="${a}" ${f.anim===a?'selected':''}>${a}</option>`).join('')}
+      </select>
+      <button class="free-el-delete" data-el-delete="${f.id}" aria-label="Remove">×</button>
+      <div class="free-el-resize" data-el-resize="${f.id}"></div>
+    </div>`).join('');
+
+  state.freeElements.forEach(f=>{
+    const el = document.getElementById('freeEl-'+f.id);
+    if(!el) return;
+    bindFreeElDrag(el, f.id);
+    bindFreeElResize(el, f.id);
+  });
+  layer.querySelectorAll('[data-el-delete]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      if(!adminMode) return;
+      state.freeElements = state.freeElements.filter(f=> f.id !== btn.getAttribute('data-el-delete'));
+      saveState(); renderFreeElements();
+    });
+  });
+  layer.querySelectorAll('[data-el-anim]').forEach(sel=>{
+    sel.addEventListener('pointerdown', (e)=> e.stopPropagation());
+    sel.addEventListener('change', (e)=>{
+      const item = findFreeEl(sel.getAttribute('data-el-anim'));
+      if(!item) return;
+      item.anim = sel.value;
+      saveState(); renderFreeElements();
+    });
+  });
+}
+
+function findFreeEl(id){ return state.freeElements.find(f=> f.id === id); }
+
+function bindFreeElDrag(el, id){
+  el.addEventListener('pointerdown', (e)=>{
+    if(!adminMode) return;
+    if(e.target.closest('.free-el-delete') || e.target.closest('.free-el-resize') || e.target.closest('.free-el-anim-select')) return;
+    e.preventDefault();
+    const item = findFreeEl(id); if(!item) return;
+    const startX = e.clientX, startY = e.clientY;
+    const origX = item.x, origY = item.y;
+    function onMove(ev){
+      item.x = origX + (ev.clientX - startX);
+      item.y = origY + (ev.clientY - startY);
+      el.style.left = item.x + 'px';
+      el.style.top = item.y + 'px';
+    }
+    function onUp(){
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      saveState();
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  });
+}
+
+function bindFreeElResize(el, id){
+  const handle = el.querySelector('.free-el-resize');
+  if(!handle) return;
+  handle.addEventListener('pointerdown', (e)=>{
+    if(!adminMode) return;
+    e.preventDefault(); e.stopPropagation();
+    const item = findFreeEl(id); if(!item) return;
+    const startX = e.clientX, startY = e.clientY;
+    const origSize = item.size;
+    function onMove(ev){
+      const delta = Math.max(ev.clientX - startX, ev.clientY - startY);
+      item.size = Math.max(28, Math.min(560, origSize + delta));
+      el.style.width = item.size + 'px';
+      el.style.height = item.size + 'px';
+      const span = el.querySelector('.free-el-inner span');
+      if(span) span.style.fontSize = Math.round(item.size*0.72) + 'px';
+    }
+    function onUp(){
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      saveState();
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  });
+}
+
+function addFreeElement(type, content, size){
+  const x = window.scrollX + Math.max(20, window.innerWidth/2 - size/2);
+  const y = window.scrollY + Math.max(100, window.innerHeight/3);
+  state.freeElements.push({ id:'el'+Date.now()+Math.floor(Math.random()*1000), type, content, x, y, size, rot:0, anim:'none' });
+  saveState(); renderFreeElements();
+  showToast('Added — drag it wherever you like, or pick an animation from its tiny dropdown.');
+}
+
+document.getElementById('stickerPalette').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.sticker-pick');
+  if(!btn || !adminMode) return;
+  addFreeElement('sticker', btn.getAttribute('data-emoji'), 56);
+});
+document.getElementById('addImageElBtn').addEventListener('click', ()=>{
+  if(!adminMode) return;
+  document.getElementById('freeImageInput').click();
+});
+document.getElementById('freeImageInput').addEventListener('change', async (e)=>{
+  if(e.target.files && e.target.files[0]){
+    try{
+      const url = await uploadImageToBlob(e.target.files[0]);
+      addFreeElement('image', url, 160);
+    }catch(err){ /* toast already shown */ }
+    e.target.value = '';
+  }
+});
+
+/* ======================================================
+   REVEAL ON SCROLL
+====================================================== */
+let observer;
+function observeReveals(){
+  if(!observer){
+    observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); observer.unobserve(e.target); } });
+    }, {threshold:.15});
+  }
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el=> observer.observe(el));
+}
+
+/* ======================================================
+   TEXT EDITING (contenteditable)
+====================================================== */
+function attachArrayTextHandlers(prefix){
+  document.querySelectorAll(`[data-edit^="${prefix}."]`).forEach(el=>{
+    if(el._bound) return; el._bound = true;
+    el.addEventListener('blur', ()=>{
+      const key = el.getAttribute('data-edit');
+      setPath(state, key, el.textContent.trim());
+      saveState();
+    });
+  });
+}
+
+document.addEventListener('blur', function(e){
+  if(e.target && e.target.hasAttribute && e.target.hasAttribute('data-edit') && !e.target.getAttribute('data-edit').includes('.')){
+    return;
+  }
+}, true);
+
+// simple top-level fields (hero.*, about.*, contact.*)
+document.querySelectorAll('[data-edit]').forEach(el=>{
+  const key = el.getAttribute('data-edit');
+  if(el._simpleBound) return;
+  el._simpleBound = true;
+  el.addEventListener('blur', ()=>{
+    try{ setPath(state, key, el.textContent.trim()); saveState(); }catch(e){}
+  });
+});
+
+/* ======================================================
+   IMAGE UPLOAD ZONES
+====================================================== */
+function fileToDataUrl(file){
+  return new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = ()=> resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+/* Images upload to the /api/upload serverless function, which stores
+   them in Vercel Blob storage and hands back a permanent URL. Only
+   that (tiny) URL string gets saved in state/localStorage — the actual
+   image bytes never touch the browser's storage limit. Requires a
+   Vercel Blob store to be attached to the project (see SETUP.md). */
+async function uploadImageToBlob(file){
+  if(file.size > 4 * 1024 * 1024){
+    showToast("That image is over 4MB — please compress it first (try squoosh.app) then upload again.");
+    throw new Error('File too large');
+  }
+  const safeName = (file.name||'image').replace(/[^a-zA-Z0-9.\-_]/g,'');
+  const filename = `img-${Date.now()}-${Math.random().toString(36).slice(2,8)}-${safeName}`;
+  let res;
+  try{
+    res = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
+      method:'POST',
+      headers:{'content-type': file.type || 'application/octet-stream'},
+      body:file
+    });
+  }catch(networkErr){
+    showToast("Couldn't reach the upload server — check your connection and try again.");
+    throw networkErr;
+  }
+  if(!res.ok){
+    let msg = 'Upload failed. Please try again.';
+    try{ const j = await res.json(); if(j.error) msg = j.error; }catch(e){}
+    showToast(msg);
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  return data.url;
+}
+
+/* Best-effort cleanup: when a slot's old image is replaced or cleared,
+   delete the old blob so it doesn't keep eating your storage quota.
+   Fire-and-forget — never blocks the UI, silently ignores failures. */
+function deleteBlobIfUrl(url){
+  if(url && /^https?:\/\//.test(url)){
+    fetch('/api/delete', {
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify({url})
+    }).catch(()=>{});
+  }
+}
+
+function attachUploadZones(){
+  document.querySelectorAll('.upload-zone[data-slot]').forEach(zone=>{
+    if(zone._uploadBound) return; zone._uploadBound = true;
+    zone.addEventListener('click', ()=>{
+      if(!adminMode) return;
+      const input = document.createElement('input');
+      input.type='file'; input.accept='image/*';
+      input.onchange = async ()=>{
+        if(input.files && input.files[0]){
+          const path = zone.getAttribute('data-slot');
+          const oldVal = getPath(state, path);
+          try{
+            const url = await uploadImageToBlob(input.files[0]);
+            setPath(state, path, url);
+            saveState();
+            renderProjects();
+            renderEditingImages();
+            const aboutZone = document.getElementById('aboutPhotoZone');
+            if(aboutZone) renderAll();
+            deleteBlobIfUrl(oldVal);
+          }catch(err){ /* toast already shown */ }
+        }
+      };
+      input.click();
+    });
+  });
+}
+
+function attachClearButtons(){
+  document.querySelectorAll('[data-clear]').forEach(btn=>{
+    if(btn._clearBound) return; btn._clearBound = true;
+    btn.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      if(!adminMode) return;
+      const path = btn.getAttribute('data-clear');
+      const oldVal = getPath(state, path);
+      setPath(state, path, '');
+      saveState();
+      renderAll();
+      deleteBlobIfUrl(oldVal);
+    });
+  });
+}
+
+// about photo separately (fixed id, not array)
+document.getElementById('aboutPhotoZone').addEventListener('click', ()=>{
+  if(!adminMode) return;
+  document.getElementById('aboutPhotoInput').click();
+});
+document.getElementById('aboutPhotoInput').addEventListener('change', async (e)=>{
+  if(e.target.files && e.target.files[0]){
+    const oldVal = state.about.photo;
+    try{
+      state.about.photo = await uploadImageToBlob(e.target.files[0]);
+      saveState(); renderAll();
+      deleteBlobIfUrl(oldVal);
+    }catch(err){ /* toast already shown */ }
+  }
+});
+
+// editing showcase before/after zones
+[['reelBeforeImg','reelBeforeInput','reelBefore'],['reelAfterImg','reelAfterInput','reelAfter'],
+ ['postBeforeImg','postBeforeInput','postBefore'],['postAfterImg','postAfterInput','postAfter']].forEach(([imgId,inputId,key])=>{
+  document.getElementById(imgId).addEventListener('click', ()=>{
+    if(!adminMode) return;
+    document.getElementById(inputId).click();
+  });
+  document.getElementById(inputId).addEventListener('change', async (e)=>{
+    if(e.target.files && e.target.files[0]){
+      const oldVal = state.editing[key];
+      try{
+        state.editing[key] = await uploadImageToBlob(e.target.files[0]);
+        saveState(); renderEditingImages();
+        deleteBlobIfUrl(oldVal);
+      }catch(err){ /* toast already shown */ }
+    }
+  });
+});
+
+function attachReelUrlInputs(){
+  document.querySelectorAll('.reel-url-input').forEach(inp=>{
+    if(inp._bound) return; inp._bound = true;
+    inp.addEventListener('change', ()=>{
+      const idx = inp.getAttribute('data-project');
+      const ri = inp.getAttribute('data-reel');
+      state.projects[idx].reels[ri].url = inp.value.trim();
+      saveState();
+      renderProjects();
+    });
+  });
+}
+
+function attachReelVideoUploads(){
+  document.querySelectorAll('[data-upload-video]').forEach(btn=>{
+    if(btn._bound) return; btn._bound = true;
+    btn.addEventListener('click', ()=>{
+      document.querySelector(`[data-upload-video-input="${btn.getAttribute('data-upload-video')}"]`).click();
+    });
+  });
+  document.querySelectorAll('[data-upload-video-input]').forEach(inp=>{
+    if(inp._bound) return; inp._bound = true;
+    inp.addEventListener('change', async ()=>{
+      if(inp.files && inp.files[0]){
+        const file = inp.files[0];
+        if(file.size > 4 * 1024 * 1024){
+          showToast("That video is over 4MB — please host it somewhere (e.g. an unlisted YouTube link or Google Drive direct link) and paste that URL above instead.");
+          return;
+        }
+        const key = inp.getAttribute('data-upload-video-input');
+        const [idx, ri] = key.split('-');
+        const dataUrl = await fileToDataUrl(file);
+        state.projects[idx].reels[ri].url = dataUrl;
+        saveState();
+        renderProjects();
+      }
+    });
+  });
+}
+
+function attachProjectDelete(){
+  document.querySelectorAll('[data-delete-project]').forEach(btn=>{
+    if(btn._bound) return; btn._bound = true;
+    btn.addEventListener('click', ()=>{
+      if(!adminMode) return;
+      if(state.projects.length <= 1){
+        showToast('Add another project before removing this one — keep at least one.');
+        return;
+      }
+      const idx = parseInt(btn.getAttribute('data-delete-project'), 10);
+      if(confirm('Remove this project from your portfolio?')){
+        state.projects.splice(idx,1);
+        saveState(); renderProjects();
+      }
+    });
+  });
+}
+
+document.getElementById('addProjectBtn').addEventListener('click', ()=>{
+  state.projects.push({
+    id:'p'+Date.now(), name:'New Project', location:'Location', industry:'Industry', platform:'Instagram',
+    description:'A short description of this project.',
+    brief:'Add a short brief for this project here.',
+    goal:'What this project set out to achieve.',
+    approach:'How the content and strategy were approached.',
+    image:'', grid:['','','','','','','','',''],
+    reels:[{url:'', caption:'A short caption about this reel.'}, {url:'', caption:'A short caption about this second reel.'}],
+    note:''
+  });
+  saveState(); renderProjects();
+});
+
+/* ======================================================
+   LOGIN + ADMIN MODE
+   NOTE: this is a client-side gate meant to keep casual visitors
+   from seeing editing tools — anyone who reads the page source can
+   find ADMIN_PASSWORD below. Change it to whatever you like before
+   you host this. It is not a substitute for real server-side auth.
+====================================================== */
+const ADMIN_PASSWORD = 'mansi123';
+let isLoggedIn = localStorage.getItem('mansiAdminLoggedIn') === 'true';
+
+function openLoginModal(){
+  document.getElementById('loginModal').classList.add('open');
+  document.getElementById('loginError').classList.remove('show');
+  const pw = document.getElementById('loginPassword');
+  pw.value = ''; pw.focus();
+}
+function closeLoginModal(){ document.getElementById('loginModal').classList.remove('open'); }
+
+function attemptLogin(){
+  const pw = document.getElementById('loginPassword').value;
+  if(pw === ADMIN_PASSWORD){
+    isLoggedIn = true;
+    localStorage.setItem('mansiAdminLoggedIn', 'true');
+    document.body.classList.add('logged-in');
+    closeLoginModal();
+    adminMode = true;
+    applyAdminState();
+    document.getElementById('designPanel').classList.add('open');
+    showToast('Logged in — editing enabled.');
+  } else {
+    document.getElementById('loginError').classList.add('show');
+  }
+}
+document.getElementById('loginSubmit').addEventListener('click', attemptLogin);
+document.getElementById('loginPassword').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') attemptLogin(); });
+document.getElementById('loginCancel').addEventListener('click', closeLoginModal);
+
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  isLoggedIn = false;
+  localStorage.removeItem('mansiAdminLoggedIn');
+  document.body.classList.remove('logged-in');
+  adminMode = false;
+  applyAdminState();
+  showToast('Logged out.');
+});
+
+let clickCount = 0, clickTimer = null;
+document.getElementById('logoTrigger').addEventListener('click', ()=>{
+  clickCount++;
+  clearTimeout(clickTimer);
+  clickTimer = setTimeout(()=> clickCount = 0, 2500);
+  if(clickCount >= 5){
+    clickCount = 0;
+    if(!isLoggedIn){
+      openLoginModal();
+    } else {
+      adminMode = !adminMode;
+      applyAdminState();
+      showToast(adminMode ? 'Edit mode on — click text or photos to update.' : 'Edit mode off.');
+    }
+  }
+});
+
+function applyAdminState(){
+  document.body.classList.toggle('admin', adminMode);
+  document.body.classList.toggle('logged-in', isLoggedIn);
+  document.querySelectorAll('[data-edit]').forEach(el=> el.setAttribute('contenteditable', (adminMode && !styleMode) ? 'true':'false'));
+  document.getElementById('addProjectBtn').style.display = adminMode ? 'inline-block' : 'none';
+  document.getElementById('editHint').style.display = adminMode ? 'inline' : 'none';
+  document.getElementById('editModeToggle').textContent = adminMode ? '✎ Editing…' : '✎ Edit Site';
+  if(!adminMode){
+    document.getElementById('designPanel').classList.remove('open');
+    if(typeof setStyleMode === 'function') setStyleMode(false);
+  }
+}
+
+/* ======================================================
+   THEME / DESIGN PANEL (font + colours)
+====================================================== */
+const FONT_PAIRS = {
+  default:{serif:"'DM Serif Display', serif", sans:"'DM Sans', sans-serif", google:null},
+  playfair:{serif:"'Playfair Display', serif", sans:"'Poppins', sans-serif", google:['Playfair+Display:ital@0;1','Poppins:wght@400;500;600']},
+  classic:{serif:"Georgia, 'Times New Roman', serif", sans:"Verdana, Arial, sans-serif", google:null},
+  modern:{serif:"'Poppins', sans-serif", sans:"'Poppins', sans-serif", google:['Poppins:wght@400;500;600;700']},
+  handwritten:{serif:"'Caveat', cursive", sans:"'DM Sans', sans-serif", google:null},
+  editorial:{serif:"'Cormorant Garamond', serif", sans:"'DM Sans', sans-serif", google:null},
+  elegant:{serif:"'Cormorant Garamond', serif", sans:"'Josefin Sans', sans-serif", google:['Josefin+Sans:wght@400;500;600']},
+  minimal:{serif:"'Inter', sans-serif", sans:"'Inter', sans-serif", google:['Inter:wght@400;500;600;700']},
+  bold:{serif:"'Bebas Neue', sans-serif", sans:"'Work Sans', sans-serif", google:['Bebas+Neue','Work+Sans:wght@400;500;600']},
+  luxury:{serif:"'Marcellus', serif", sans:"'Jost', sans-serif", google:['Marcellus','Jost:wght@400;500;600']},
+  romantic:{serif:"'Italiana', serif", sans:"'Lora', serif", google:['Italiana','Lora:wght@400;500;600']},
+  tech:{serif:"'Space Grotesk', sans-serif", sans:"'Space Grotesk', sans-serif", google:['Space+Grotesk:wght@400;500;600;700']},
+  warm:{serif:"'Fraunces', serif", sans:"'Nunito Sans', sans-serif", google:['Fraunces:wght@400;500;600','Nunito+Sans:wght@400;600']},
+  dramatic:{serif:"'Abril Fatface', serif", sans:"'Karla', sans-serif", google:['Abril+Fatface','Karla:wght@400;500;600']},
+  vintage:{serif:"'Prata', serif", sans:"'Quicksand', sans-serif", google:['Prata','Quicksand:wght@400;500;600']},
+  playful:{serif:"'Pacifico', cursive", sans:"'Nunito', sans-serif", google:['Pacifico','Nunito:wght@400;600;700']}
+};
+let loadedFontLink = null;
+function applyTheme(){
+  const t = state.theme || DEFAULTS.theme;
+  const root = document.documentElement.style;
+  root.setProperty('--ivory', t.ivory);
+  root.setProperty('--plum', t.plum);
+  root.setProperty('--plum-soft', t.plum);
+  root.setProperty('--berry', t.berry);
+  root.setProperty('--bag-c1', t.bagC1);
+  root.setProperty('--bag-c2', t.bagC2);
+
+  const pair = FONT_PAIRS[t.font] || FONT_PAIRS.default;
+  root.setProperty('--serif', pair.serif);
+  root.setProperty('--sans', pair.sans);
+  if(pair.google){
+    if(!loadedFontLink){
+      loadedFontLink = document.createElement('link');
+      loadedFontLink.rel = 'stylesheet';
+      document.head.appendChild(loadedFontLink);
+    }
+    loadedFontLink.href = 'https://fonts.googleapis.com/css2?family=' + pair.google.join('&family=') + '&display=swap';
+  }
+
+  // sync panel controls without retriggering change events
+  const fs = document.getElementById('fontSelect'); if(fs) fs.value = t.font;
+  const ci = document.getElementById('colorIvory'); if(ci) ci.value = t.ivory;
+  const cp = document.getElementById('colorPlum'); if(cp) cp.value = t.plum;
+  const cb = document.getElementById('colorBerry'); if(cb) cb.value = t.berry;
+  const c1 = document.getElementById('colorBagC1'); if(c1) c1.value = t.bagC1;
+  const c2 = document.getElementById('colorBagC2'); if(c2) c2.value = t.bagC2;
+}
+
+/* ======================================================
+   PER-SECTION COLOUR OVERRIDES
+====================================================== */
+const SECTION_IDS = ['nav','home','about','what-i-do','why-me','work','tools','editing','platforms','contact'];
+
+function applySectionThemes(){
+  SECTION_IDS.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const t = (state.sectionThemes && state.sectionThemes[id]) || {};
+    if(t.bg){ el.style.setProperty('background-color', t.bg); } else { el.style.removeProperty('background-color'); }
+    if(t.text){ el.style.setProperty('--plum', t.text); el.style.setProperty('--plum-soft', t.text); }
+    else { el.style.removeProperty('--plum'); el.style.removeProperty('--plum-soft'); }
+  });
+  syncSectionThemeControls();
+}
+
+function syncSectionThemeControls(){
+  const sel = document.getElementById('sectionThemeSelect');
+  const bgInp = document.getElementById('sectionBgColor');
+  const textInp = document.getElementById('sectionTextColor');
+  if(!sel || !bgInp || !textInp) return;
+  const id = sel.value;
+  const t = (state.sectionThemes && state.sectionThemes[id]) || {};
+  bgInp.value = t.bg || state.theme.ivory;
+  textInp.value = t.text || state.theme.plum;
+}
+
+/* ======================================================
+   ANIMATION SETTINGS
+====================================================== */
+function applyAnimSettings(){
+  const a = state.animations || DEFAULTS.animations;
+  document.body.setAttribute('data-text-anim', a.text || 'fadeup');
+  document.body.setAttribute('data-photo-anim', a.photo || 'none');
+  const ts = document.getElementById('textAnimSelect'); if(ts) ts.value = a.text || 'fadeup';
+  const ps = document.getElementById('photoAnimSelect'); if(ps) ps.value = a.photo || 'none';
+}
+
+/* ======================================================
+   PER-ELEMENT STYLE ENGINE (Style-Click Mode)
+   Lets someone click ONE text or ONE box and change just that
+   item's font / colour / animation — everything else is untouched.
+   Text elements are keyed by their existing data-edit path.
+   Boxes/cards are keyed by a data-box path added to their markup.
+====================================================== */
+const ELEMENT_FONTS = [
+  {label:'Playfair Display', value:"'Playfair Display', serif", google:'Playfair+Display:ital@0;1'},
+  {label:'DM Serif Display', value:"'DM Serif Display', serif", google:'DM+Serif+Display:ital@0;1'},
+  {label:'Cormorant Garamond', value:"'Cormorant Garamond', serif", google:'Cormorant+Garamond:ital,wght@0,400;0,500;1,400'},
+  {label:'DM Sans', value:"'DM Sans', sans-serif", google:'DM+Sans:wght@400;500;700'},
+  {label:'Poppins', value:"'Poppins', sans-serif", google:'Poppins:wght@400;500;600;700'},
+  {label:'Caveat (handwritten)', value:"'Caveat', cursive", google:'Caveat:wght@500;600;700'},
+  {label:'Georgia (classic)', value:"Georgia, 'Times New Roman', serif", google:null},
+  {label:'Verdana', value:"Verdana, Arial, sans-serif", google:null},
+  {label:'Josefin Sans', value:"'Josefin Sans', sans-serif", google:'Josefin+Sans:wght@400;500;600'},
+  {label:'Inter', value:"'Inter', sans-serif", google:'Inter:wght@400;500;600;700'},
+  {label:'Bebas Neue', value:"'Bebas Neue', sans-serif", google:'Bebas+Neue'},
+  {label:'Work Sans', value:"'Work Sans', sans-serif", google:'Work+Sans:wght@400;500;600'},
+  {label:'Marcellus', value:"'Marcellus', serif", google:'Marcellus'},
+  {label:'Jost', value:"'Jost', sans-serif", google:'Jost:wght@400;500;600'},
+  {label:'Italiana', value:"'Italiana', serif", google:'Italiana'},
+  {label:'Lora', value:"'Lora', serif", google:'Lora:wght@400;500;600'},
+  {label:'Space Grotesk', value:"'Space Grotesk', sans-serif", google:'Space+Grotesk:wght@400;500;600;700'},
+  {label:'Fraunces', value:"'Fraunces', serif", google:'Fraunces:wght@400;500;600'},
+  {label:'Nunito Sans', value:"'Nunito Sans', sans-serif", google:'Nunito+Sans:wght@400;600'},
+  {label:'Karla', value:"'Karla', sans-serif", google:'Karla:wght@400;500;600'},
+  {label:'Prata', value:"'Prata', serif", google:'Prata'},
+  {label:'Quicksand', value:"'Quicksand', sans-serif", google:'Quicksand:wght@400;500;600'},
+  {label:'Pacifico (playful)', value:"'Pacifico', cursive", google:'Pacifico'},
+  {label:'Nunito', value:"'Nunito', sans-serif", google:'Nunito:wght@400;600;700'},
+  {label:'Abril Fatface', value:"'Abril Fatface', serif", google:'Abril+Fatface'}
+];
+const loadedElementFonts = new Set();
+function ensureFontLoaded(fontEntry){
+  if(!fontEntry || !fontEntry.google || loadedElementFonts.has(fontEntry.google)) return;
+  loadedElementFonts.add(fontEntry.google);
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=' + fontEntry.google + '&display=swap';
+  document.head.appendChild(link);
+}
+
+const REVEAL_VARS = {
+  fadeup:{from:'translateY(26px)', to:'translateY(0)'},
+  fadein:{from:'none', to:'none'},
+  slideleft:{from:'translateX(-46px)', to:'translateX(0)'},
+  slideright:{from:'translateX(46px)', to:'translateX(0)'},
+  zoom:{from:'scale(.86)', to:'scale(1)'},
+  bounce:{from:'translateY(34px)', to:'translateY(0)', transition:'opacity .5s ease, transform .6s cubic-bezier(.34,1.56,.64,1)'}
+};
+const ENTRANCE_ANIMS = ['fadeup','fadein','slideleft','slideright','zoom','bouncein'];
+const CONTINUOUS_ANIMS = ['float','pulse','spin','sway','wiggle','blink'];
+const BOX_ANIM_LABELS = {
+  fadeup:'Fade up on scroll', fadein:'Fade in on scroll', slideleft:'Slide from left',
+  slideright:'Slide from right', zoom:'Zoom in on scroll', bouncein:'Bounce in on scroll',
+  float:'Gentle float (always on)', pulse:'Pulse (always on)', spin:'Spin (always on)',
+  sway:'Sway (always on)', wiggle:'Wiggle (always on)', blink:'Blink (always on)'
+};
+
+function rgbToHex(rgb){
+  const m = rgb && rgb.match(/\d+/g);
+  if(!m) return '#000000';
+  return '#' + m.slice(0,3).map(x=> Math.max(0,Math.min(255,parseInt(x,10))).toString(16).padStart(2,'0')).join('');
+}
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function friendlyLabel(key){
+  return key.split('.').map(part=>{
+    if(/^\d+$/.test(part)) return 'Item ' + (parseInt(part,10)+1);
+    return part.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase());
+  }).join(' · ');
+}
+
+function applyElementStyles(){
+  document.querySelectorAll('[data-edit]').forEach(el=>{
+    const key = el.getAttribute('data-edit');
+    const s = state.elementStyles && state.elementStyles[key];
+    if(s && s.font){
+      el.style.setProperty('font-family', s.font);
+      ensureFontLoaded(ELEMENT_FONTS.find(f=> f.value === s.font));
+    } else {
+      el.style.removeProperty('font-family');
+    }
+    if(s && s.color){ el.style.setProperty('color', s.color); }
+    else { el.style.removeProperty('color'); }
+  });
+}
+
+function applyBoxStyles(){
+  document.querySelectorAll('[data-box]').forEach(el=>{
+    const key = el.getAttribute('data-box');
+    const s = (state.boxStyles && state.boxStyles[key]) || {};
+    if(s.bg){ el.style.setProperty('background-color', s.bg); }
+    else { el.style.removeProperty('background-color'); }
+
+    CONTINUOUS_ANIMS.forEach(c=> el.classList.remove('box-anim-'+c));
+    el.style.removeProperty('--reveal-from');
+    el.style.removeProperty('--reveal-to');
+    el.style.removeProperty('--reveal-transition');
+
+    if(s.anim && ENTRANCE_ANIMS.includes(s.anim)){
+      const a = REVEAL_VARS[s.anim === 'bouncein' ? 'bounce' : s.anim];
+      if(a){
+        el.style.setProperty('--reveal-from', a.from);
+        el.style.setProperty('--reveal-to', a.to);
+        if(a.transition) el.style.setProperty('--reveal-transition', a.transition);
+      }
+    } else if(s.anim && CONTINUOUS_ANIMS.includes(s.anim)){
+      el.classList.add('box-anim-'+s.anim);
+    }
+  });
+}
+
+let styleMode = false;
+function setStyleMode(on){
+  styleMode = on;
+  document.body.classList.toggle('style-mode', styleMode);
+  document.querySelectorAll('[data-edit]').forEach(el=> el.setAttribute('contenteditable', (adminMode && !styleMode) ? 'true':'false'));
+  const btn = document.getElementById('styleModeToggle');
+  if(btn){
+    btn.textContent = styleMode ? '🎯 Style-Click Mode: ON' : '🎯 Style-Click Mode: OFF';
+    btn.classList.toggle('on', styleMode);
+  }
+  if(!styleMode) closeElPopover();
+  else showToast('Style-Click Mode on — click any text or box to style just that one.');
+}
+document.getElementById('styleModeToggle').addEventListener('click', ()=> setStyleMode(!styleMode));
+
+function closeElPopover(){
+  const p = document.getElementById('elStylePop');
+  if(p) p.remove();
+}
+
+function openElPopover(textEl, boxEl){
+  closeElPopover();
+  const pop = document.createElement('div');
+  pop.id = 'elStylePop';
+  pop.className = 'el-style-pop';
+  let html = '<button class="el-pop-close" aria-label="Close">×</button><h4>Style what you clicked</h4>';
+
+  if(textEl){
+    const key = textEl.getAttribute('data-edit');
+    const cur = (state.elementStyles && state.elementStyles[key]) || {};
+    html += `<div class="el-pop-block">
+      <p class="el-pop-label">Text — ${escapeHtml(friendlyLabel(key))}</p>
+      <label>Font
+        <select id="elFontSelect">
+          <option value="">Site default</option>
+          ${ELEMENT_FONTS.map(f=>`<option value="${escapeHtml(f.value)}" ${cur.font===f.value?'selected':''}>${escapeHtml(f.label)}</option>`).join('')}
+        </select>
+      </label>
+      <label>Text colour
+        <input type="color" id="elColorInput" value="${cur.color || rgbToHex(getComputedStyle(textEl).color)}">
+      </label>
+      <button class="el-pop-reset" id="elTextReset" type="button">Reset this text's style</button>
+    </div>`;
+  }
+  if(boxEl){
+    const key = boxEl.getAttribute('data-box');
+    const cur = (state.boxStyles && state.boxStyles[key]) || {};
+    html += `<div class="el-pop-block">
+      <p class="el-pop-label">Box — ${escapeHtml(friendlyLabel(key))}</p>
+      <label>Background colour
+        <input type="color" id="elBgInput" value="${cur.bg || rgbToHex(getComputedStyle(boxEl).backgroundColor)}">
+      </label>
+      <label>Animation
+        <select id="elAnimSelect">
+          <option value="">Site default</option>
+          <optgroup label="Plays once, on scroll">
+            ${ENTRANCE_ANIMS.map(a=>`<option value="${a}" ${cur.anim===a?'selected':''}>${BOX_ANIM_LABELS[a]}</option>`).join('')}
+          </optgroup>
+          <optgroup label="Loops continuously">
+            ${CONTINUOUS_ANIMS.map(a=>`<option value="${a}" ${cur.anim===a?'selected':''}>${BOX_ANIM_LABELS[a]}</option>`).join('')}
+          </optgroup>
+        </select>
+      </label>
+      <button class="el-pop-reset" id="elBoxReset" type="button">Reset this box's style</button>
+    </div>`;
+  }
+
+  pop.innerHTML = html;
+  document.body.appendChild(pop);
+  pop.querySelector('.el-pop-close').addEventListener('click', closeElPopover);
+
+  if(textEl){
+    const key = textEl.getAttribute('data-edit');
+    document.getElementById('elFontSelect').addEventListener('change', (e)=>{
+      state.elementStyles[key] = state.elementStyles[key] || {};
+      state.elementStyles[key].font = e.target.value;
+      applyElementStyles(); saveState();
+    });
+    document.getElementById('elColorInput').addEventListener('input', (e)=>{
+      state.elementStyles[key] = state.elementStyles[key] || {};
+      state.elementStyles[key].color = e.target.value;
+      applyElementStyles(); saveState();
+    });
+    document.getElementById('elTextReset').addEventListener('click', ()=>{
+      delete state.elementStyles[key];
+      applyElementStyles(); saveState();
+      showToast('That text is back to the site-wide font & colour.');
+      closeElPopover();
+    });
+  }
+  if(boxEl){
+    const key = boxEl.getAttribute('data-box');
+    document.getElementById('elBgInput').addEventListener('input', (e)=>{
+      state.boxStyles[key] = state.boxStyles[key] || {};
+      state.boxStyles[key].bg = e.target.value;
+      applyBoxStyles(); saveState();
+    });
+    document.getElementById('elAnimSelect').addEventListener('change', (e)=>{
+      state.boxStyles[key] = state.boxStyles[key] || {};
+      state.boxStyles[key].anim = e.target.value;
+      applyBoxStyles(); saveState();
+    });
+    document.getElementById('elBoxReset').addEventListener('click', ()=>{
+      delete state.boxStyles[key];
+      applyBoxStyles(); saveState();
+      showToast('That box is back to its site-wide colour & animation.');
+      closeElPopover();
+    });
+  }
+}
+
+document.addEventListener('click', function(e){
+  if(!styleMode) return;
+  if(e.target.closest('#elStylePop') || e.target.closest('#designPanel') || e.target.closest('.edit-mode-toggle')) return;
+  const textEl = e.target.closest('[data-edit]');
+  const boxEl = e.target.closest('[data-box]');
+  if(!textEl && !boxEl) return;
+  e.preventDefault();
+  e.stopPropagation();
+  openElPopover(textEl, boxEl);
+}, true);
+
+document.getElementById('editModeToggle').addEventListener('click', ()=>{
+  if(!isLoggedIn) return;
+  adminMode = !adminMode;
+  applyAdminState();
+  if(adminMode) document.getElementById('designPanel').classList.add('open');
+  showToast(adminMode ? 'Edit mode on — click text or photos to update.' : 'Edit mode off.');
+});
+document.getElementById('downloadSiteBtn').addEventListener('click', exportSite);
+document.getElementById('designPanelClose').addEventListener('click', ()=>{
+  document.getElementById('designPanel').classList.remove('open');
+});
+document.getElementById('fontSelect').addEventListener('change', (e)=>{
+  state.theme.font = e.target.value; applyTheme(); saveState();
+});
+document.getElementById('colorIvory').addEventListener('input', (e)=>{ state.theme.ivory = e.target.value; applyTheme(); saveState(); });
+document.getElementById('colorPlum').addEventListener('input', (e)=>{ state.theme.plum = e.target.value; applyTheme(); saveState(); });
+document.getElementById('colorBerry').addEventListener('input', (e)=>{ state.theme.berry = e.target.value; applyTheme(); saveState(); });
+document.getElementById('colorBagC1').addEventListener('input', (e)=>{ state.theme.bagC1 = e.target.value; applyTheme(); saveState(); });
+document.getElementById('colorBagC2').addEventListener('input', (e)=>{ state.theme.bagC2 = e.target.value; applyTheme(); saveState(); });
+document.getElementById('resetThemeBtn').addEventListener('click', ()=>{
+  state.theme = JSON.parse(JSON.stringify(DEFAULTS.theme));
+  applyTheme(); saveState();
+  showToast('Design reset to defaults.');
+});
+
+document.getElementById('sectionThemeSelect').addEventListener('change', syncSectionThemeControls);
+document.getElementById('sectionBgColor').addEventListener('input', (e)=>{
+  const id = document.getElementById('sectionThemeSelect').value;
+  state.sectionThemes[id] = state.sectionThemes[id] || {};
+  state.sectionThemes[id].bg = e.target.value;
+  applySectionThemes(); saveState();
+});
+document.getElementById('sectionTextColor').addEventListener('input', (e)=>{
+  const id = document.getElementById('sectionThemeSelect').value;
+  state.sectionThemes[id] = state.sectionThemes[id] || {};
+  state.sectionThemes[id].text = e.target.value;
+  applySectionThemes(); saveState();
+});
+document.getElementById('sectionThemeReset').addEventListener('click', ()=>{
+  const id = document.getElementById('sectionThemeSelect').value;
+  delete state.sectionThemes[id];
+  applySectionThemes(); saveState();
+  showToast('That section is back to the site-wide colours.');
+});
+
+document.getElementById('textAnimSelect').addEventListener('change', (e)=>{
+  state.animations.text = e.target.value;
+  applyAnimSettings(); saveState();
+});
+document.getElementById('photoAnimSelect').addEventListener('change', (e)=>{
+  state.animations.photo = e.target.value;
+  applyAnimSettings(); saveState();
+});
+
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('adminToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 3200);
+}
+
+/* ======================================================
+   NAV: mobile menu
+====================================================== */
+const mobileMenu = document.getElementById('mobileMenu');
+document.getElementById('hamburgerBtn').addEventListener('click', ()=> mobileMenu.classList.add('open'));
+document.getElementById('mobileClose').addEventListener('click', ()=> mobileMenu.classList.remove('open'));
+mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
+
+/* ======================================================
+   TOOLS ORBIT ANIMATION
+====================================================== */
+function layoutOrbit(stageEl, active){
+  if(!stageEl) return;
+  const badges = stageEl.querySelectorAll('.tool-badge');
+  const radius = window.innerWidth < 500 ? 120 : 160;
+  const n = badges.length;
+  badges.forEach((b,i)=>{
+    if(active){
+      const angle = (i / n) * Math.PI * 2 - Math.PI/2;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+      b.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`;
+    } else {
+      b.style.transform = 'translate(-50%,-50%) scale(.2)';
+    }
+  });
+  stageEl.classList.toggle('active', active);
+}
+
+const toolsStage = document.getElementById('toolsStage');
+const tableBtn = document.getElementById('tableBtn');
+let toolsActive = false;
+tableBtn.addEventListener('click', ()=>{ toolsActive = !toolsActive; layoutOrbit(toolsStage, toolsActive); });
+
+window.addEventListener('resize', ()=>{ layoutOrbit(toolsStage, toolsActive); });
+
+/* ======================================================
+   BEFORE / AFTER COMPARE SLIDERS
+====================================================== */
+function initCompare(boxId, handleId, afterClass){
+  const box = document.getElementById(boxId);
+  const handle = document.getElementById(handleId);
+  const after = box.querySelector('.after');
+  let dragging = false;
+  function setPct(pct){
+    pct = Math.max(0, Math.min(100, pct));
+    after.style.clipPath = `inset(0 ${100-pct}% 0 0)`;
+    handle.style.left = pct + '%';
+  }
+  function pointerToPct(clientX){
+    const rect = box.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * 100;
+  }
+  box.addEventListener('mousedown', (e)=>{ dragging = true; setPct(pointerToPct(e.clientX)); });
+  window.addEventListener('mousemove', (e)=>{ if(dragging) setPct(pointerToPct(e.clientX)); });
+  window.addEventListener('mouseup', ()=> dragging = false);
+  box.addEventListener('touchstart', (e)=>{ dragging = true; setPct(pointerToPct(e.touches[0].clientX)); }, {passive:true});
+  box.addEventListener('touchmove', (e)=>{ if(dragging) setPct(pointerToPct(e.touches[0].clientX)); }, {passive:true});
+  box.addEventListener('touchend', ()=> dragging = false);
+  setPct(50);
+}
+initCompare('compareReel','reelHandle');
+initCompare('comparePost','postHandle');
+
+/* ======================================================
+   INIT
+====================================================== */
+observeReveals();
+loadState();
+})();
+</script>
+</body>
+</html>
