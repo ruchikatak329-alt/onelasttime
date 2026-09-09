@@ -330,6 +330,7 @@ header.nav{
 }
 .insta-post-single img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
 .insta-post-single:hover img{transform:scale(1.04);}
+.post-video-frame.reel-frame{width:min(440px,100%);aspect-ratio:4/5;border-radius:8px;}
 
 /* reel */
 .reel-wrap{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:40px;margin-top:70px;}
@@ -1029,7 +1030,7 @@ const DEFAULTS = {
       brief:'While working as a social media manager at Catchy Climbers Marketing Agency, I handled a client\'s Instagram page — building out post and reel concepts, planning the feed and shaping captions that matched the brand\'s personality. Kakke di Hatti is a mock version of that same approach: I imagined it as a real neighbourhood cafe and gave it the same care I\'d give any client, from feed rhythm down to how each caption sounds out loud.',
       goal:'Design a warm, consistent feed presence that makes a small local cafe feel inviting online, and turn casual scrollers into regulars.',
       approach:'Planned a simple content mix of drinks, ambience and behind-the-counter moments, then built out a cohesive grid, a sample reel and supporting captions to match.',
-      image:'', grid:['','','','','','','','',''], story:'', storyMode:true, post:'',
+      image:'', grid:['','','','','','','','',''], story:'', storyMode:true, postVideoUrl:'',
       reels:[
         {url:'', caption:'A short reel concept showing the drink-making process, cut for pace and rhythm.'},
         {url:'', caption:'A second reel — a different angle or format for the same project.'}
@@ -1279,10 +1280,15 @@ function renderProjects(){
         <div class="case-grid">
           
           ${p.storyMode ? `
-          <div class="insta-post-single upload-zone" data-slot="projects.${idx}.post" id="post-${idx}">
-            ${p.post ? `<img src="${p.post}">` : ''}
-            <div class="upload-overlay"><span>Add Post</span></div>
-            <button class="slot-delete" data-clear="projects.${idx}.post">×</button>
+          <div class="reel-item">
+            <div class="reel-frame post-video-frame" id="postVideoFrame-${idx}">
+              ${p.postVideoUrl ? `<video src="${p.postVideoUrl}" controls playsinline></video>` : `<div class="reel-placeholder">video preview</div>`}
+            </div>
+            <input type="text" class="url-input reel-url-input" data-project="${idx}" data-reel="post" placeholder="Paste a video URL (mp4 link)…" value="${p.postVideoUrl||''}" style="max-width:340px;">
+            <div class="reel-upload-row">
+              <button class="reel-upload-btn" data-upload-video="post-${idx}">⭱ Upload video from device</button>
+              <input type="file" accept="video/*" class="reel-file-input" data-upload-video-input="post-${idx}" style="display:none;">
+            </div>
           </div>
           ` : `
           <div class="insta-grid">
@@ -1619,7 +1625,11 @@ function attachReelUrlInputs(){
     inp.addEventListener('change', ()=>{
       const idx = inp.getAttribute('data-project');
       const ri = inp.getAttribute('data-reel');
-      state.projects[idx].reels[ri].url = inp.value.trim();
+      if(ri === 'post'){
+        state.projects[idx].postVideoUrl = inp.value.trim();
+      } else {
+        state.projects[idx].reels[ri].url = inp.value.trim();
+      }
       saveState();
       renderProjects();
     });
@@ -1643,9 +1653,14 @@ function attachReelVideoUploads(){
           return;
         }
         const key = inp.getAttribute('data-upload-video-input');
-        const [idx, ri] = key.split('-');
         const dataUrl = await fileToDataUrl(file);
-        state.projects[idx].reels[ri].url = dataUrl;
+        if(key.startsWith('post-')){
+          const idx = key.split('-')[1];
+          state.projects[idx].postVideoUrl = dataUrl;
+        } else {
+          const [idx, ri] = key.split('-');
+          state.projects[idx].reels[ri].url = dataUrl;
+        }
         saveState();
         renderProjects();
       }
