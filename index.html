@@ -415,6 +415,7 @@ body.admin .project-delete{display:block;}
 .compare-box.reel-ratio{width:min(360px,85vw);aspect-ratio:9/16;}
 .compare-box.post-ratio{width:min(440px,92vw);aspect-ratio:4/5;}
 .compare-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+#editReelPlaceholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ivory);font-family:var(--hand);font-size:1.1rem;text-align:center;padding:10px;pointer-events:none;}
 .compare-note{max-width:280px;margin:14px auto 0;font-family:var(--serif-2);font-style:italic;font-size:.9rem;color:var(--plum-soft);min-height:1.4em;}
 
 /* carousel (4-photo post) */
@@ -805,11 +806,16 @@ body.style-mode .reel-upload-btn{pointer-events:none;}
     <div class="edit-row">
       <div class="compare-group">
         <h4>Reel</h4>
-        <div class="compare-box reel-ratio upload-zone" id="editReelBox" data-slot="editing.reel" data-box="editing.reel">
-          <img class="compare-layer" id="editReelImg">
-          <div class="upload-overlay"><span>Add Reel</span></div>
+        <div class="compare-box reel-ratio" id="editReelBox" data-box="editing.reel">
+          <video class="compare-layer" id="editReelVideo" controls playsinline></video>
+          <div class="reel-placeholder" id="editReelPlaceholder">reel preview</div>
           <button class="slot-delete" data-clear="editing.reel">×</button>
         </div>
+        <div class="reel-upload-row">
+          <button class="reel-upload-btn" id="editReelUploadBtn">⭱ Upload video from device</button>
+          <input type="file" accept="video/*" id="editReelFileInput" style="display:none;">
+        </div>
+        <input type="text" class="url-input reel-url-input" id="editReelUrlInput" placeholder="Paste a video URL (mp4 link)…" style="max-width:340px;">
         <p class="compare-note" data-edit="editing.reelNote" contenteditable="false">Add a line or two about this edit here.</p>
       </div>
       <div class="compare-group">
@@ -1408,9 +1414,61 @@ function renderProjects(){
 }
 
 function renderEditingImages(){
-  setImgIfAny('editReelImg', state.editing.reel);
+  const reelVideo = document.getElementById('editReelVideo');
+  const reelPlaceholder = document.getElementById('editReelPlaceholder');
+  const reelUrlInput = document.getElementById('editReelUrlInput');
+  const reelVal = state.editing.reel || '';
+  if(reelVideo){
+    if(reelVal){ reelVideo.src = reelVal; reelVideo.style.display='block'; }
+    else { reelVideo.removeAttribute('src'); reelVideo.style.display='none'; }
+  }
+  if(reelPlaceholder) reelPlaceholder.style.display = reelVal ? 'none' : 'flex';
+  if(reelUrlInput && document.activeElement !== reelUrlInput) reelUrlInput.value = reelVal;
+  attachEditReelVideoUpload();
+
   const imgs = state.editing.postImages || ['','','',''];
   imgs.forEach((v,i)=> setImgIfAny(`editPostImg${i}`, v));
+}
+
+/* Reel box in the editing showcase is a video slot (uses the same
+   uploadVideoToBlob()/Blob-storage path as project reels), not a photo
+   upload-zone — wired separately from attachUploadZones(). */
+function attachEditReelVideoUpload(){
+  const btn = document.getElementById('editReelUploadBtn');
+  const input = document.getElementById('editReelFileInput');
+  const urlInput = document.getElementById('editReelUrlInput');
+  if(!btn || !input || !urlInput) return;
+  if(!btn._bound){
+    btn._bound = true;
+    btn.addEventListener('click', ()=>{ if(adminMode) input.click(); });
+  }
+  if(!input._bound){
+    input._bound = true;
+    input.addEventListener('change', async ()=>{
+      if(input.files && input.files[0]){
+        const oldVal = state.editing.reel;
+        try{
+          const url = await uploadVideoToBlob(input.files[0]);
+          state.editing.reel = url;
+          saveState();
+          renderEditingImages();
+          deleteBlobIfUrl(oldVal);
+        }catch(err){ /* toast already shown */ }
+        input.value = '';
+      }
+    });
+  }
+  if(!urlInput._bound){
+    urlInput._bound = true;
+    urlInput.addEventListener('change', ()=>{
+      const oldVal = state.editing.reel;
+      const newVal = urlInput.value.trim();
+      state.editing.reel = newVal;
+      saveState();
+      renderEditingImages();
+      if(oldVal !== newVal) deleteBlobIfUrl(oldVal);
+    });
+  }
 }
 function setImgIfAny(id, val){
   const el = document.getElementById(id);
