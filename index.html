@@ -413,9 +413,30 @@ body.admin .project-delete{display:block;}
   position:relative;overflow:hidden;border-radius:10px;box-shadow:var(--shadow);background:var(--plum);
 }
 .compare-box.reel-ratio{width:min(360px,85vw);aspect-ratio:9/16;}
-.compare-box.post-ratio{width:min(480px,92vw);aspect-ratio:1/1;}
+.compare-box.post-ratio{width:min(440px,92vw);aspect-ratio:4/5;}
 .compare-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .compare-note{max-width:280px;margin:14px auto 0;font-family:var(--serif-2);font-style:italic;font-size:.9rem;color:var(--plum-soft);min-height:1.4em;}
+
+/* carousel (4-photo post) */
+.carousel-track{display:flex;width:400%;height:100%;transition:transform .35s cubic-bezier(.2,.7,.2,1);}
+.carousel-slide{width:25%;height:100%;flex-shrink:0;position:relative;background:var(--plum);}
+.carousel-slide img{width:100%;height:100%;object-fit:cover;display:none;}
+.carousel-slide.has-image img{display:block;}
+.carousel-slide.has-image .carousel-empty{display:none;}
+.carousel-empty{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:var(--ivory);font-family:var(--hand);font-size:.95rem;text-align:center;padding:10px;
+}
+.carousel-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;
+  background:rgba(0,0,0,.45);color:#fff;border:none;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;line-height:1;cursor:pointer;z-index:7;
+}
+.carousel-arrow.prev{left:10px;}
+.carousel-arrow.next{right:10px;}
+.carousel-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:7;}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer;border:none;padding:0;}
+.carousel-dot.active{background:#fff;}
 
 /* ============ PLATFORMS ============ */
 .platform-field{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:20px;}
@@ -792,16 +813,47 @@ body.style-mode .reel-upload-btn{pointer-events:none;}
         <p class="compare-note" data-edit="editing.reelNote" contenteditable="false">Add a line or two about this edit here.</p>
       </div>
       <div class="compare-group">
-        <h4>Post</h4>
-        <div class="compare-box post-ratio upload-zone" id="editPostBox" data-slot="editing.post" data-box="editing.post">
-          <img class="compare-layer" id="editPostImg">
-          <div class="upload-overlay"><span>Add Post</span></div>
-          <button class="slot-delete" data-clear="editing.post">×</button>
+        <h4>Post <span style="font-size:.65rem;opacity:.7;">(carousel — up to 4 photos)</span></h4>
+        <div class="compare-box post-ratio" id="editPostCarousel" data-box="editing.post">
+          <div class="carousel-track" id="editPostTrack">
+            <div class="carousel-slide upload-zone" data-slot="editing.postImages.0" id="editPostSlide0">
+              <img id="editPostImg0">
+              <div class="carousel-empty"><span>+ Photo 1</span></div>
+              <div class="upload-overlay"><span>Change</span></div>
+              <button class="slot-delete" data-clear="editing.postImages.0">×</button>
+            </div>
+            <div class="carousel-slide upload-zone" data-slot="editing.postImages.1" id="editPostSlide1">
+              <img id="editPostImg1">
+              <div class="carousel-empty"><span>+ Photo 2</span></div>
+              <div class="upload-overlay"><span>Change</span></div>
+              <button class="slot-delete" data-clear="editing.postImages.1">×</button>
+            </div>
+            <div class="carousel-slide upload-zone" data-slot="editing.postImages.2" id="editPostSlide2">
+              <img id="editPostImg2">
+              <div class="carousel-empty"><span>+ Photo 3</span></div>
+              <div class="upload-overlay"><span>Change</span></div>
+              <button class="slot-delete" data-clear="editing.postImages.2">×</button>
+            </div>
+            <div class="carousel-slide upload-zone" data-slot="editing.postImages.3" id="editPostSlide3">
+              <img id="editPostImg3">
+              <div class="carousel-empty"><span>+ Photo 4</span></div>
+              <div class="upload-overlay"><span>Change</span></div>
+              <button class="slot-delete" data-clear="editing.postImages.3">×</button>
+            </div>
+          </div>
+          <button class="carousel-arrow prev" id="editPostPrev" type="button" aria-label="Previous photo">‹</button>
+          <button class="carousel-arrow next" id="editPostNext" type="button" aria-label="Next photo">›</button>
+          <div class="carousel-dots" id="editPostDots">
+            <button class="carousel-dot active" data-dot="0" type="button" aria-label="Photo 1"></button>
+            <button class="carousel-dot" data-dot="1" type="button" aria-label="Photo 2"></button>
+            <button class="carousel-dot" data-dot="2" type="button" aria-label="Photo 3"></button>
+            <button class="carousel-dot" data-dot="3" type="button" aria-label="Photo 4"></button>
+          </div>
         </div>
         <p class="compare-note" data-edit="editing.postNote" contenteditable="false">Add a line or two about this edit here.</p>
       </div>
     </div>
-    <p style="max-width:420px;margin:20px auto 0;color:var(--plum-soft);font-size:.85rem;"><span id="editHint" style="display:none;">(Admin: click a frame to upload an image, hover + click × to remove it.)</span></p>
+    <p style="max-width:420px;margin:20px auto 0;color:var(--plum-soft);font-size:.85rem;"><span id="editHint" style="display:none;">(Admin: click a frame to upload an image, hover + click × to remove it. Use the arrows/dots on the Post carousel to add all 4 photos.)</span></p>
   </div>
 </section>
 
@@ -1021,7 +1073,7 @@ const DEFAULTS = {
     {name:'LinkedIn',desc:'Professional storytelling'},
     {name:'YouTube',desc:'Video storytelling'}
   ],
-  editing:{reel:'', post:'', reelNote:'Add a line or two about this edit here.', postNote:'Add a line or two about this edit here.'},
+  editing:{reel:'', postImages:['','','',''], reelNote:'Add a line or two about this edit here.', postNote:'Add a line or two about this edit here.'},
   contact:{line:"Have an idea, a brand or a story that deserves to be seen? Let's turn it into something worth stopping for.",name:'Mansi Sankhla',instagram:'@thatgirlmansi',email:'sankhlamansi723@gmail.com',phone:'9462653296'},
   projects:[
     {
@@ -1312,12 +1364,33 @@ function renderProjects(){
 
 function renderEditingImages(){
   setImgIfAny('editReelImg', state.editing.reel);
-  setImgIfAny('editPostImg', state.editing.post);
+  const imgs = state.editing.postImages || ['','','',''];
+  imgs.forEach((v,i)=> setImgIfAny(`editPostImg${i}`, v));
 }
 function setImgIfAny(id, val){
   const el = document.getElementById(id);
   if(val){ el.src = val; } else { el.removeAttribute('src'); }
+  const slide = el.closest('.carousel-slide');
+  if(slide) slide.classList.toggle('has-image', !!val);
 }
+
+/* ======================================================
+   EDITING SHOWCASE — POST CAROUSEL (up to 4 photos)
+====================================================== */
+let editPostCarouselIndex = 0;
+function goToCarouselSlide(i){
+  editPostCarouselIndex = Math.max(0, Math.min(3, i));
+  const track = document.getElementById('editPostTrack');
+  if(track) track.style.transform = `translateX(-${editPostCarouselIndex * 25}%)`;
+  document.querySelectorAll('#editPostDots .carousel-dot').forEach((dot, i2)=>{
+    dot.classList.toggle('active', i2 === editPostCarouselIndex);
+  });
+}
+document.getElementById('editPostPrev').addEventListener('click', ()=> goToCarouselSlide(editPostCarouselIndex - 1));
+document.getElementById('editPostNext').addEventListener('click', ()=> goToCarouselSlide(editPostCarouselIndex + 1));
+document.querySelectorAll('#editPostDots .carousel-dot').forEach(dot=>{
+  dot.addEventListener('click', ()=> goToCarouselSlide(parseInt(dot.getAttribute('data-dot'),10)));
+});
 
 /* ======================================================
    FREE ELEMENTS — stickers & images placed anywhere on the page
