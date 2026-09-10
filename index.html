@@ -1029,6 +1029,14 @@ body.style-mode .reel-upload-btn{pointer-events:none;}
 </div>
 
 <script id="savedStateScript">window.__SAVED_STATE__ = null;</script>
+<script type="module">
+  // Loads the Vercel Blob browser upload helper so videos can go straight
+  // from this browser to Blob storage (bypassing the ~4.5MB function limit
+  // that regular image uploads go through). Exposed as a global so the
+  // main script below (plain, non-module JS) can call it.
+  import { upload } from 'https://esm.sh/@vercel/blob@2.8.0/client';
+  window.__blobUpload = upload;
+</script>
 <script>
 (function(){
 /* ======================================================
@@ -1122,6 +1130,33 @@ function deepMerge(base, extra){
   return (extra !== undefined && extra !== null && extra !== '') ? extra : base;
 }
 
+/* One-time cleanup: earlier versions of this site (and a brief window
+   before video uploads moved to Blob storage) saved images/videos as
+   giant base64 text directly in localStorage. Those leftovers silently
+   eat the tiny ~5-10MB browser storage quota forever, breaking future
+   saves — including totally unrelated ones. This finds and clears any
+   such leftover text anywhere in the state, whatever field it's under. */
+function stripLegacyDataUrls(node){
+  let found = false;
+  function walk(n){
+    if(Array.isArray(n)){
+      n.forEach(walk);
+    } else if(n && typeof n === 'object'){
+      Object.keys(n).forEach(k=>{
+        const v = n[k];
+        if(typeof v === 'string' && v.indexOf('data:') === 0){
+          n[k] = '';
+          found = true;
+        } else if(v && typeof v === 'object'){
+          walk(v);
+        }
+      });
+    }
+  }
+  walk(node);
+  return found;
+}
+
 async function loadState(){
   try{
     if(window.__SAVED_STATE__){
@@ -1133,6 +1168,16 @@ async function loadState(){
       state = deepMerge(state, saved);
     }
   }catch(e){ /* no saved data yet — use defaults */ }
+
+  if(stripLegacyDataUrls(state)){
+    try{
+      localStorage.setItem('mansi-portfolio-data', JSON.stringify(state));
+    }catch(e){
+      try{ localStorage.removeItem('mansi-portfolio-data'); }catch(e2){}
+    }
+    setTimeout(()=> showToast('Cleared some old locally-stored files to fix a storage issue — please re-upload anything that now looks missing, using the upload buttons.'), 800);
+  }
+
   renderAll();
 }
 
@@ -1628,6 +1673,33 @@ function deleteBlobIfUrl(url){
   }
 }
 
+/* Videos upload directly from the browser to Vercel Blob (not through
+   our own function), so there's no small size limit like images have.
+   Requires the module script above to have loaded window.__blobUpload. */
+async function uploadVideoToBlob(file){
+  if(!window.__blobUpload){
+    showToast("Video upload isn't ready yet — please refresh the page and try again.");
+    throw new Error('Blob client not loaded yet');
+  }
+  if(file.size > 100 * 1024 * 1024){
+    showToast("That video is over 100MB — please compress it first and try again.");
+    throw new Error('File too large');
+  }
+  const safeName = (file.name||'video').replace(/[^a-zA-Z0-9.\-_]/g,'');
+  const filename = `vid-${Date.now()}-${Math.random().toString(36).slice(2,8)}-${safeName}`;
+  try{
+    const blob = await window.__blobUpload(filename, file, {
+      access: 'public',
+      handleUploadUrl: '/api/video-upload',
+    });
+    return blob.url;
+  }catch(err){
+    console.error('Video upload error:', err);
+    showToast("Video upload failed — check your connection and try again, or paste a video URL instead.");
+    throw err;
+  }
+}
+
 function attachUploadZones(){
   document.querySelectorAll('.upload-zone[data-slot]').forEach(zone=>{
     if(zone._uploadBound) return; zone._uploadBound = true;
@@ -1698,13 +1770,18 @@ function attachReelUrlInputs(){
     inp.addEventListener('change', ()=>{
       const idx = inp.getAttribute('data-project');
       const ri = inp.getAttribute('data-reel');
+      const newVal = inp.value.trim();
+      let oldVal;
       if(ri === 'post'){
-        state.projects[idx].postVideoUrl = inp.value.trim();
+        oldVal = state.projects[idx].postVideoUrl;
+        state.projects[idx].postVideoUrl = newVal;
       } else {
-        state.projects[idx].reels[ri].url = inp.value.trim();
+        oldVal = state.projects[idx].reels[ri].url;
+        state.projects[idx].reels[ri].url = newVal;
       }
       saveState();
       renderProjects();
+      if(oldVal !== newVal) deleteBlobIfUrl(oldVal);
     });
   });
 }
@@ -1721,21 +1798,27 @@ function attachReelVideoUploads(){
     inp.addEventListener('change', async ()=>{
       if(inp.files && inp.files[0]){
         const file = inp.files[0];
-        if(file.size > 4 * 1024 * 1024){
-          showToast("That video is over 4MB — please host it somewhere (e.g. an unlisted YouTube link or Google Drive direct link) and paste that URL above instead.");
-          return;
-        }
         const key = inp.getAttribute('data-upload-video-input');
-        const dataUrl = await fileToDataUrl(file);
+        let oldVal;
         if(key.startsWith('post-')){
-          const idx = key.split('-')[1];
-          state.projects[idx].postVideoUrl = dataUrl;
+          oldVal = state.projects[key.split('-')[1]].postVideoUrl;
         } else {
           const [idx, ri] = key.split('-');
-          state.projects[idx].reels[ri].url = dataUrl;
+          oldVal = state.projects[idx].reels[ri].url;
         }
-        saveState();
-        renderProjects();
+        try{
+          const url = await uploadVideoToBlob(file);
+          if(key.startsWith('post-')){
+            const idx = key.split('-')[1];
+            state.projects[idx].postVideoUrl = url;
+          } else {
+            const [idx, ri] = key.split('-');
+            state.projects[idx].reels[ri].url = url;
+          }
+          saveState();
+          renderProjects();
+          deleteBlobIfUrl(oldVal);
+        }catch(err){ /* toast already shown */ }
       }
     });
   });
