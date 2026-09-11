@@ -1272,7 +1272,11 @@ let adminMode = false;
 let saveTimer = null;
 
 function deepMerge(base, extra){
-  if(Array.isArray(base)) return (extra && extra.length) ? extra : base;
+  // An array field that's present (even empty) means "this is the current,
+  // intentional value" and should win outright — e.g. deleting every
+  // sticker leaves an empty array, which must NOT be treated the same as
+  // "no data here, fall back to the old saved copy."
+  if(Array.isArray(base)) return Array.isArray(extra) ? extra : base;
   if(typeof base === 'object' && base !== null){
     const out = {...base};
     if(extra && typeof extra === 'object'){
