@@ -1341,14 +1341,7 @@ async function loadState(){
   // Convert any legacy pixel-based sticker positions to percentages once
   // the page has fully laid out (images loaded, real scrollHeight known),
   // then re-render and persist so this only needs to run once.
-  const migrateAndRerender = ()=>{
-    if(migrateFreeElementUnits()){
-      renderFreeElements();
-      saveState();
-    }
-  };
-  if(document.readyState === 'complete') migrateAndRerender();
-  else window.addEventListener('load', migrateAndRerender, {once:true});
+  const migrateAndRerender = ()=>{ const migrated = migrateFreeElementUnits(); renderFreeElements(); if(migrated) saveState(); }; if(document.readyState === 'complete') migrateAndRerender(); else window.addEventListener('load', migrateAndRerender, {once:true}); if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=> renderFreeElements()); }
 }
 
 /* Bakes the current state into the page and downloads it as a new
